@@ -264,6 +264,25 @@ nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
     <label class="meal"><input type="checkbox" data-r="5"><span>Tidur sebelum larut</span></label>
   </div>
   <div class="sec">
+    <h2>Ide kilat</h2>
+    <p class="mut">Ada ide lewat? Tulis 1 baris, biar nggak hilang.</p>
+    <label class="f" for="ide">Ide barusan apa</label>
+    <div class="row" style="margin-top:8px"><input type="text" id="ide" maxlength="140" placeholder="Contoh: masak nasi habis solat" autocomplete="off" style="flex:1;min-width:0"><button class="btn" id="ideSave">Catat</button></div>
+    <ul class="wk" id="ideList"></ul>
+  </div>
+  <div class="sec">
+    <h2>Niat</h2>
+    <p class="mut">Niat mau apa, kapan bunyinya. Misal: masak nasi habis solat.</p>
+    <label class="f" for="niatApa">Mau apa</label>
+    <input type="text" id="niatApa" maxlength="140" placeholder="Contoh: masak nasi" autocomplete="off">
+    <div class="row" style="margin-top:8px">
+      <div style="flex:1;min-width:0"><label class="f" for="niatJam">Jam berapa</label><input type="time" id="niatJam"></div>
+      <div><label class="f" for="niatUlang">Ulangi</label><button class="ghost" id="niatUlang" aria-pressed="false" style="min-width:120px">Sekali saja</button></div>
+    </div>
+    <p class="row" style="margin-top:10px"><button class="btn" id="niatSave">Pasang pengingat</button><span class="ok" id="niatOk" hidden>Terpasang.</span></p>
+    <ul class="wk" id="niatList"></ul>
+  </div>
+  <div class="sec">
     <h2>Mulai dari sini</h2>
     <p class="rit"><button class="ghost" data-go="jurnal">Tulis jurnal 1 menit</button><button class="ghost" data-go="bengong">Bengong 10 menit</button><button class="ghost" data-go="fokus">Fokus 15 menit</button></p>
   </div>
@@ -334,7 +353,8 @@ nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const K='sepersen:v2', esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let S; try{S=JSON.parse(localStorage.getItem(K))}catch{}
-S=S||{}; S.days=S.days||{}; S.set=Object.assign({t:['07:00','12:00','19:00'],w:8,n:false,h:false,seen:false},S.set);
+S=S||{}; S.days=S.days||{}; S.ide=S.ide||[]; S.niat=S.niat||[];
+S.set=Object.assign({t:['07:00','12:00','19:00'],w:8,n:false,h:false,seen:false},S.set);
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch{}};
 const dk=d=>new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const T=dk(new Date()), blank=()=>({win:'',mood:'',m:[0,0,0],w:0,j:null,r:[0,0,0,0,0,0],calm:0,fokus:0,rem:0});
@@ -358,6 +378,7 @@ function home(){
   $('#greet').textContent=(h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam')+' · '+new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});
   $$('.sg').forEach((s,i)=>s.classList.toggle('on',f[i]));
   tween($('#cnt'),n); $('#orb').style.setProperty('--p',n/N);
+  ideList(); niatList();
   $('#win').value=d.win;
   $$('#moods .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.m===d.mood));
   $$('[data-meal]').forEach(c=>c.checked=!!d.m[c.dataset.meal]);
@@ -374,6 +395,20 @@ $$('[data-meal]').forEach(c=>c.onchange=()=>{D().m[c.dataset.meal]=c.checked?1:0
 $$('[data-r]').forEach(c=>c.onchange=()=>{D().r[c.dataset.r]=c.checked?1:0;save();home()});
 $('#glasses').onclick=e=>{const b=e.target.closest('.g');if(!b)return;const d=D(),i=+b.dataset.g,was=d.w;d.w=d.w===i+1?i:i+1;save();home();if(was<S.set.w&&d.w>=S.set.w){buzz([40,60,40]);toast('Target air hari ini tercapai.')}};
 $$('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;go(g==='fokus'?'bengong':g);if(g==='fokus')setMode('fokus')});
+
+/* Ide kilat + Niat */
+function ideList(){ $('#ideList').innerHTML=S.ide.length?[...S.ide].reverse().map((x,i)=>{const k=S.ide.length-1-i;return `<li><time>${fmt(x.k)}</time><span class="w">${esc(x.t)}</span><span class="row"><button class="ghost" data-ideok="${k}" style="min-height:44px;padding:8px 14px">Beres</button><button class="ghost" data-iderm="${k}" style="min-height:44px;padding:8px 14px" aria-label="Hapus ide">Hapus</button></span></li>`}).join(''):'<li><span class="mut">Belum ada ide. Tulis yang barusan lewat.</span></li>' }
+$('#ideSave').onclick=()=>{const v=$('#ide').value.trim();if(!v)return toast('Tulis dulu idenya satu baris.');S.ide.push({t:v,k:T});if(S.ide.length>50)S.ide=S.ide.slice(-50);save();$('#ide').value='';ideList();toast('Ide tersimpan.')};
+$('#ideList').onclick=e=>{const ok=e.target.closest('[data-ideok]'),rm=e.target.closest('[data-iderm]');if(ok){const x=S.ide[+ok.dataset.ideok];if(x){const d=D();if(!d.win)d.win=x.t;save();toast('Pindah jadi win hari ini.')}}if(rm){S.ide.splice(+rm.dataset.iderm,1);save();ideList()}};
+
+let niatUlang=false;
+$('#niatUlang').onclick=e=>{niatUlang=!niatUlang;e.currentTarget.textContent=niatUlang?'Tiap hari':'Sekali saja';e.currentTarget.setAttribute('aria-pressed',niatUlang)};
+function niatList(){ $('#niatList').innerHTML=S.niat.length?S.niat.map((x,i)=>`<li><time>${x.jam}</time><span class="w">${esc(x.apa)}${x.ulang?' · tiap hari':''}${x.bunyi?' · sudah bunyi':''}</span><span class="row"><button class="ghost" data-niatrm="${i}" style="min-height:44px;padding:8px 14px" aria-label="Hapus pengingat">Hapus</button></span></li>`).join(''):'<li><span class="mut">Belum ada niat. Contoh: masak nasi jam 17:30.</span></li>' }
+function niatDaftar(i){ try{ const j=window.JadwalNiat; if(j&&j.simpan){ const x=S.niat[i]; j.simpan(String(i),x.apa,x.jam,!!x.ulang); return } }catch{} }
+$('#niatSave').onclick=()=>{const apa=$('#niatApa').value.trim(),jam=$('#niatJam').value;if(!apa)return toast('Tulis dulu maunya apa.');if(!jam)return toast('Atur dulu jam berapa.');S.niat.push({apa,jam,ulang:niatUlang,bunyi:false});save();niatDaftar(S.niat.length-1);$('#niatApa').value='';flash('#niatOk');niatList();toast('Pengingat niat terpasang.')};
+$('#niatList').onclick=e=>{const rm=e.target.closest('[data-niatrm]');if(!rm)return;const i=+rm.dataset.niatrm;try{const j=window.JadwalNiat;if(j&&j.hapus)j.hapus(String(i))}catch{}S.niat.splice(i,1);save();niatList()};
+function niatCek(){const n=new Date(),hm=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');let ubah=false;S.niat.forEach((x,i)=>{if(x.jam!==hm||x.bunyi&&!x.ulang)return;if(x.bunyi&&x.ulang&&fired['n'+T+i])return;fired['n'+T+i]=1;toast(x.apa);buzz([60,60,60]);if(window.JadwalNiat&&window.JadwalNiat.kabar){try{window.JadwalNiat.kabar('Sepersen · niat',x.apa)}catch{}}else if(S.set.n&&'Notification' in window&&Notification.permission==='granted'){try{new Notification('Sepersen · niat',{body:x.apa})}catch{}}if(!x.ulang){x.bunyi=true;ubah=true}});if(ubah){save();niatList()}}
+setInterval(niatCek,20000);
 
 /* Jurnal */
 const fmt=k=>new Date(k+'T00:00:00').toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'});
