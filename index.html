@@ -3,388 +3,439 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FFF6E8">
+<meta name="theme-color" content="#15122A">
 <title>Sepersen, 1% lebih baik tiap hari</title>
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#FFF6E8; --ink:#1C1917; --copper:#92400E; --pine:#065F46;
-  --card:#FFFFFF; --line:#F0DFC2; --control:#A98A5F; --tint:#FFF1DE;
-  --muted:#57534E; --hero-ink:#FFFBEB;
-  --sh-card:0 18px 40px rgba(146,64,14,.17), 0 2px 6px rgba(146,64,14,.10);
-  --sh-card-lg:0 24px 54px rgba(146,64,14,.20), 0 3px 8px rgba(146,64,14,.10);
-  --gold:#E9C98A;
-  --sh-press:0 4px 12px rgba(146,64,14,.22), inset 0 1px 0 rgba(255,255,255,.25);
-  --sh-nav:0 12px 34px rgba(28,25,23,.18);
-  --sh-halo:0 0 0 10px rgba(255,246,232,.06), 0 0 44px rgba(255,246,232,.16);
-  --r-card:24px; --r-field:16px;
-  --ease:cubic-bezier(.22,.8,.3,1);
+  --ink:#F2EEFB; --mut:#B8B1D3; --peach:#FFB48F; --mint:#8FE0C0; --deep:#2A1405;
+  --line:rgba(255,255,255,.13); --glass:rgba(255,255,255,.06); --edge:rgba(255,255,255,.38);
+  --disp:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
 }
-*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-html{-webkit-text-size-adjust:100%}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; background:#15122A}
 body{
-  margin:0; color:var(--ink); background:var(--bg);
-  font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-size:16px; line-height:1.6;
-}
-body::before{
-  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  margin:0; min-height:100vh; color:var(--ink); font:400 16px/1.55 "Figtree",system-ui,sans-serif;
   background:
-    radial-gradient(220px 220px at 88% -40px, #FBEEDC 0%, rgba(251,238,220,0) 70%),
-    radial-gradient(300px 300px at -60px 220px, #FBEEDC 0%, rgba(251,238,220,0) 70%);
+    radial-gradient(420px 360px at 85% -60px, rgba(255,180,143,.30), transparent 70%),
+    radial-gradient(380px 380px at -90px 55%, rgba(120,98,200,.28), transparent 70%),
+    linear-gradient(180deg,#15122A 0%,#241B40 100%) fixed;
 }
-h1,h2{font-family:"Fraunces","Plus Jakarta Sans",system-ui,serif; font-weight:600; line-height:1.2; letter-spacing:-.01em}
-h1{font-size:clamp(28px,6.5vw,32px); margin:0 0 4px}
-h2{font-size:20px; margin:0 0 8px}
-p{margin:0 0 12px}
-.sub{color:var(--muted)}
-.wrap{max-width:480px; margin:0 auto; padding:20px 16px 132px}
-.hero{display:flex; gap:12px; align-items:center; margin:4px 0 16px}
-.mono{
-  width:54px; height:54px; border-radius:19px; flex:none;
-  background:linear-gradient(180deg,#A5520F 0%,var(--copper) 70%,#7C3A0C 100%); color:#fff;
-  font-family:"Fraunces",serif; font-size:20px; font-weight:600;
-  display:flex; align-items:center; justify-content:center;
-  border:1.5px solid rgba(233,201,138,.75);
-  box-shadow:0 10px 22px rgba(146,64,14,.30), inset 0 1px 0 rgba(255,255,255,.45), inset 0 -2px 4px rgba(0,0,0,.20);
-}
-.hero h1{font-size:clamp(24px,5.6vw,27px)}
-.card{
-  background:var(--card); border:1px solid var(--line);
-  border-radius:var(--r-card); padding:18px; margin:0 0 16px;
-}
-.card.hero-card{background:linear-gradient(180deg,#FFFFFF 0%,var(--tint) 100%); box-shadow:var(--sh-card-lg), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(146,64,14,.06)}
-.card.flat{box-shadow:none; background:#FFFEFB}
-.kicker{color:var(--copper); font-weight:700; font-size:13px; letter-spacing:.02em; margin:0 0 4px}
-label.f{display:block; font-weight:700; margin:12px 0 6px}
+.wrap{max-width:480px; margin:0 auto; padding:calc(26px + env(safe-area-inset-top,0px)) 20px 140px}
+h1,h2,.num{font-family:var(--disp); letter-spacing:-.025em}
+h1{font-weight:600; font-size:clamp(34px,9.6vw,42px); line-height:1.04; margin:6px 0 22px; text-wrap:balance}
+h2{font-weight:600; font-size:21px; line-height:1.2; margin:0 0 6px}
+p{margin:0 0 14px}
+.mut{color:var(--mut)}
+.date{color:var(--mut); font-weight:500; margin:0}
+section[hidden]{display:none}
+section{animation:in 260ms ease-out}
+@keyframes in{from{opacity:0; transform:translateY(8px)}}
+
+/* Orb: cincin 6 segmen, satu segmen untuk tiap hal kecil yang beres */
+.orb{position:relative; width:220px; height:220px; margin:0 auto 34px; display:grid; place-items:center; text-align:center}
+.orb::before{content:""; position:absolute; inset:-30px; border-radius:50%; z-index:-1;
+  background:radial-gradient(circle, rgba(255,180,143,calc(.12 + var(--p,0)*.5)) 0%, transparent 68%); transition:background 600ms}
+.orb svg{position:absolute; inset:0; fill:none; stroke-width:9; stroke-linecap:round}
+.sg{stroke:rgba(255,255,255,.12); transition:stroke 400ms}
+.sg.on{stroke:var(--peach)}
+.boot .sg{transition-delay:var(--d)}
+.orb .num{font-size:68px; font-weight:700; line-height:1}
+.orb small{display:block; color:var(--mut); font-size:14px; margin-top:4px}
+
+.panel{background:var(--glass); border:1px solid var(--line); border-radius:28px; padding:22px 20px; margin:0 0 26px}
+.sec{border-top:1px solid var(--line); padding:24px 0 6px; margin:0 0 6px}
+label.f{display:block; font-weight:600; font-size:15px; margin:16px 0 6px}
 input[type=text],input[type=time],input[type=number],textarea{
-  width:100%; font:inherit; color:var(--ink);
-  border:1.5px solid var(--control); border-radius:var(--r-field);
-  padding:12px; background:#FFFEFB; min-height:48px;
+  width:100%; font:inherit; color:var(--ink); min-height:50px; padding:12px 14px;
+  background:rgba(255,255,255,.07); border:1.5px solid var(--edge); border-radius:14px;
 }
-textarea{min-height:88px; resize:vertical}
-:focus{outline:none}
-input:focus-visible,textarea:focus-visible,button:focus-visible{
-  outline:3px solid var(--copper); outline-offset:2px;
-}
-.dark button:focus-visible{outline-color:var(--hero-ink)}
-h1:focus{outline:none}
-button{
-  font:inherit; font-weight:700; min-height:48px; min-width:48px;
-  border-radius:999px; border:1.5px solid transparent;
-  padding:12px 22px; cursor:pointer; will-change:transform;
-}
-button:active{transform:scale(.97)}
-.btn{
-  background:linear-gradient(180deg,#B25A14 0%,var(--copper) 55%,#7C3A0C 100%); color:#fff;
-  box-shadow:0 10px 22px rgba(146,64,14,.32), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 4px rgba(0,0,0,.18);
-}
-.btn.ghost{background:transparent; color:var(--copper); border-color:var(--copper)}
-.btn.quiet{background:var(--tint); color:var(--ink)}
+textarea{min-height:96px; resize:vertical}
+::placeholder{color:#9C95BB}
+input[type=time],input[type=number]{color-scheme:dark}
+:focus-visible{outline:3px solid var(--peach); outline-offset:2px}
+button{font:inherit; font-weight:600; min-height:50px; min-width:48px; border:1.5px solid transparent; border-radius:999px; padding:12px 24px; cursor:pointer; color:var(--ink); background:none; transition:transform 120ms}
+button:active{transform:scale(.96)}
+.btn{background:var(--peach); color:var(--deep); box-shadow:0 14px 26px -12px rgba(255,180,143,.7)}
+.ghost{border-color:var(--edge)}
 .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-.row.between{justify-content:space-between}
-.chips{display:flex; gap:10px; flex-wrap:wrap}
-.chip{
-  background:#FFFEFB; color:var(--ink);
-  border:1.5px solid var(--line); padding:10px 16px; min-height:48px;
-}
-.chip[aria-pressed=true]{background:var(--pine); border-color:var(--pine); color:#fff; box-shadow:0 6px 14px rgba(6,95,70,.28)}
-.checkline{display:flex; gap:12px; align-items:center; min-height:52px; padding:8px 12px; border:1px solid var(--line); border-radius:var(--r-field); margin:0 0 8px; background:#FFFEFB}
-.checkline input{width:26px; height:26px; accent-color:var(--pine); flex:none}
-.checkline label{flex:1}
-.checkline.done{background:var(--tint); border-color:var(--control)}
-.water{display:flex; gap:12px; align-items:center; background:var(--tint); border:1px solid var(--line); border-radius:var(--r-field); padding:10px 12px; margin-top:4px; flex-wrap:wrap}
-.waterbar{flex:1 1 100%; height:6px; border-radius:999px; background:#EBD9BE; overflow:hidden}
-.waterbar > span{display:block; height:100%; width:0%; border-radius:999px; background:linear-gradient(90deg,var(--pine),#0E9F6E); transition:width 300ms ease-out}
-.waternum{font-family:"Fraunces",serif; font-weight:600; font-size:34px; color:var(--pine); min-width:64px; text-align:center; font-variant-numeric:tabular-nums}
-.dark{
-  background:radial-gradient(320px 320px at 50% 30%, #292524 0%, var(--ink) 70%);
-  color:var(--hero-ink);
-  border-radius:var(--r-card); padding:36px 20px; text-align:center;
-}
-.dark .timer{
-  font-family:"Fraunces",serif; font-size:64px; font-weight:600;
-  letter-spacing:.01em; margin:8px 0 16px; font-variant-numeric:tabular-nums;
-}
-.dark .halo{display:inline-block; border-radius:999px; box-shadow:var(--sh-halo); padding:4px 18px}
-.dark .btn.ghost{color:var(--hero-ink); border-color:var(--hero-ink)}
-.hist{border-top:1px solid var(--line); padding:12px 0}
-.hist:last-child{border-bottom:1px solid var(--line)}
-.hist time{color:var(--copper); font-weight:700; font-size:14px}
-.week{list-style:none; margin:12px 0 0; padding:0}
-.week li{display:flex; gap:10px; align-items:baseline; padding:10px 2px; border-top:1px solid var(--line); min-height:48px}
-.week li:last-child{border-bottom:1px solid var(--line)}
-.week time{font-weight:700; color:var(--copper); min-width:64px; flex:none}
-.statline{display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 0}
-.statline span{background:var(--tint); border:1px solid var(--line); border-radius:999px; padding:8px 14px; font-weight:700}
-.bars{display:flex; gap:8px; align-items:flex-end; margin:12px 0 4px; min-height:120px}
-.bar{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; min-width:0}
-.bar .col{width:100%; max-width:36px; border-radius:8px 8px 4px 4px; background:#EBD9BE; position:relative; height:96px}
-.bar .fill{position:absolute; bottom:0; left:0; right:0; border-radius:8px 8px 4px 4px; background:linear-gradient(180deg,#0E9F6E,var(--pine)); transform-origin:bottom; transform:scaleY(0); transition:transform 400ms var(--ease)}
-.bar.today .col{outline:2px solid var(--copper); outline-offset:2px}
-.bar span{font-size:12px; font-weight:700; color:var(--muted)}
-.bar b{font-size:12px}
-.seg{display:flex; gap:8px; margin:0 0 12px}
-.seg button{flex:1; background:#FFFEFB; border:1.5px solid var(--line); color:var(--ink); min-height:48px; padding:10px 8px}
-.seg button[aria-pressed=true]{background:var(--copper); border-color:var(--copper); color:#fff}
-.toast{
-  position:fixed; left:50%; transform:translate(-50%,12px);
-  bottom:112px; width:min(448px,calc(100% - 32px));
-  background:var(--ink); color:var(--hero-ink); border-radius:var(--r-field);
-  padding:12px 16px 12px 14px; z-index:30;
-  border-left:4px solid var(--pine);
-  opacity:0; visibility:hidden;
-  transition:opacity 200ms ease-out, transform 200ms ease-out, visibility 200ms;
-}
+.ok{color:var(--mint); font-weight:600}
+.chips{display:flex; gap:8px; flex-wrap:wrap}
+.chip{border-color:var(--edge); padding:10px 18px}
+.chip[aria-pressed=true]{background:var(--ink); color:#1B1633; border-color:var(--ink)}
+
+.meal{display:flex; align-items:center; gap:14px; min-height:56px; border-bottom:1px solid var(--line); font-weight:500}
+.meal input{appearance:none; -webkit-appearance:none; margin:0; width:28px; height:28px; border-radius:50%; border:1.5px solid var(--edge); display:grid; place-content:center; flex:none; transition:background 150ms}
+.meal input::after{content:""; width:12px; height:7px; border-left:2.5px solid #0E3B2B; border-bottom:2.5px solid #0E3B2B; transform:translateY(-1px) rotate(-45deg) scale(0); transition:transform 160ms}
+.meal input:checked{background:var(--mint); border-color:var(--mint)}
+.meal input:checked::after{transform:translateY(-1px) rotate(-45deg) scale(1)}
+.meal span{flex:1}
+.meal time{color:var(--mut); font-size:14px}
+.glasses{display:flex; flex-wrap:wrap; gap:4px; margin:12px -4px 4px}
+.g{width:48px; height:48px; padding:0; display:grid; place-items:center}
+.g i{width:26px; height:26px; border-radius:50%; border:1.5px solid var(--edge); transition:all 200ms}
+.g.on i{background:var(--mint); border-color:var(--mint); box-shadow:0 0 14px rgba(143,224,192,.5)}
+
+.timer{position:relative; width:260px; height:260px; margin:10px auto 26px; display:grid; place-items:center}
+.timer svg{position:absolute; inset:0; fill:none; stroke-width:6; stroke-linecap:round; transform:rotate(-90deg)}
+.timer .tr{stroke:rgba(255,255,255,.12)} .timer .pr{stroke:var(--peach); transition:stroke-dashoffset 300ms linear}
+.timer .num{font-size:60px; font-weight:600; font-variant-numeric:tabular-nums}
+.timer.run::before{content:""; position:absolute; inset:14px; border-radius:50%; background:radial-gradient(circle,rgba(255,180,143,.22),transparent 70%); animation:br 4s ease-in-out infinite}
+@keyframes br{50%{transform:scale(1.12); opacity:.6}}
+.center{justify-content:center; text-align:center}
+
+.hist{border-top:1px solid var(--line); padding:14px 0}
+.hist time,.wk time{color:var(--peach); font-weight:600; font-size:14px}
+.hist p{margin:4px 0 0; color:var(--mut)}
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:22px 10px; margin:6px 0 10px}
+.stats .num{font-size:38px; font-weight:700; line-height:1}
+.stats span{display:block; color:var(--mut); font-size:14px; margin-top:4px}
+.wk{list-style:none; margin:0; padding:0}
+.wk li{display:flex; gap:12px; align-items:center; border-top:1px solid var(--line); min-height:56px}
+.wk time{min-width:44px}
+.wk .w{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.pips{display:flex; gap:4px}
+.pips i{width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.14)}
+.pips i.on{background:var(--peach)}
+
+nav{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(12px + env(safe-area-inset-bottom,0px)); z-index:20;
+  width:min(440px,calc(100% - 32px)); display:grid; grid-template-columns:repeat(5,1fr); padding:6px;
+  background:rgba(30,24,56,.72); -webkit-backdrop-filter:blur(20px) saturate(1.4); backdrop-filter:blur(20px) saturate(1.4);
+  border:1px solid var(--line); border-radius:999px; box-shadow:0 20px 40px -14px rgba(0,0,0,.6)}
+nav button{flex-direction:column; display:flex; align-items:center; justify-content:center; gap:3px; padding:8px 2px; min-height:58px; font-size:12px; color:var(--mut); border-radius:999px}
+nav svg{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+nav button[aria-selected=true]{color:#1B1633; background:var(--peach)}
+.toast{position:fixed; left:50%; bottom:calc(104px + env(safe-area-inset-bottom,0px)); transform:translate(-50%,12px); width:min(440px,calc(100% - 40px));
+  background:var(--ink); color:#1B1633; font-weight:600; padding:14px 18px; border-radius:16px; opacity:0; visibility:hidden; z-index:30; transition:all 220ms}
 .toast.show{opacity:1; visibility:visible; transform:translate(-50%,0)}
-nav.tabs{
-  position:fixed; bottom:12px; left:50%; transform:translateX(-50%);
-  width:min(448px,calc(100% - 32px));
-  background:#FFFFFF;
-  border:1px solid var(--line); border-radius:999px;
-  box-shadow:var(--sh-nav);
-  display:grid; grid-template-columns:repeat(5,1fr);
-  padding:6px; z-index:20;
-}
-nav.tabs button{
-  background:none; border:none; color:var(--muted);
-  font-size:12px; font-weight:700; padding:8px 4px;
-  border-radius:999px; min-height:60px;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-}
-nav.tabs button{position:relative}
-nav.tabs button svg{width:22px; height:22px}
-nav.tabs button[aria-selected=true]{color:#fff; background:var(--copper)}
-nav.tabs button[aria-selected=true]::after{content:""; position:absolute; bottom:6px; left:50%; transform:translateX(-50%); width:5px; height:5px; border-radius:999px; background:#fff; opacity:.9}
-[hidden]{display:none !important}
-.welcome{position:fixed; inset:0; z-index:40; background:var(--bg); overflow-y:auto; padding:24px 16px calc(24px + env(safe-area-inset-bottom))}
-.welcome .sheet{max-width:480px; margin:0 auto; padding-bottom:16px}
-.perm{display:flex; gap:12px; align-items:flex-start; background:var(--card); border:1px solid var(--line); border-radius:var(--r-card); padding:16px; margin:0 0 12px}
-.perm .ic{width:44px; height:44px; border-radius:14px; flex:none; background:var(--tint); display:flex; align-items:center; justify-content:center; color:var(--copper)}
-.perm .ic svg{width:22px; height:22px}
-.perm h2{font-size:17px; margin:0 0 4px}
-.perm p{margin:0 0 10px; font-size:14px}
-.perm .st{font-weight:700; color:var(--pine); font-size:14px}
-.saved{display:inline-flex; align-items:center; gap:6px; color:var(--pine); font-weight:700}
-.saved::before{content:""; width:10px; height:10px; border-radius:999px; background:var(--pine)}
-.rv{opacity:0; transform:translateY(10px); transition:opacity 280ms var(--ease), transform 280ms var(--ease); will-change:transform,opacity}
-.rv.in{opacity:1; transform:translateZ(0)}
-.welcome .rv.in{transform:translateZ(0)}
-.btn{transition:transform 120ms ease-out}
-.btn:active{transform:scale(.96)}
-.chip{transition:transform 120ms ease-out}
-.chip:active{transform:scale(.95)}
-.chip[aria-pressed=true]{transition:transform 120ms ease-out}
-.waternum.pop{animation:pop 220ms var(--ease)}
-@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
-.waterbar > span{transition:transform 300ms ease-out; transform-origin:left; transform:scaleX(0)}
-.dark .halo{position:relative; isolation:isolate}
-.dark .halo::before{content:""; position:absolute; inset:-10px; border-radius:999px; background:rgba(255,246,232,.10); filter:blur(22px); z-index:-1; opacity:.8}
-.ring{position:relative; display:inline-block; border-radius:999px; padding:10px}
-.ring svg{position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg)}
-.ring .track{fill:none; stroke:rgba(255,246,232,.18); stroke-width:5}
-.ring .prog{fill:none; stroke:var(--gold); stroke-width:5; stroke-linecap:round; transition:stroke-dashoffset 250ms linear}
-.dark.run .halo::before{animation:halo 4s ease-in-out infinite}
-@keyframes halo{0%,100%{transform:scale(1); opacity:.7}50%{transform:scale(1.08); opacity:1}}
-nav.tabs button{transition:color 150ms ease-out, transform 120ms ease-out}
-nav.tabs button:active{transform:scale(.94)}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none !important; transition:none !important}
-  .rv{opacity:1; transform:none}
-  .toast{transform:translate(-50%,0)}
-  .waterbar > span{transform:scaleX(var(--w,0))}
-}
+.welcome{position:fixed; inset:0; z-index:40; display:flex; align-items:flex-end; justify-content:center; background:rgba(8,6,20,.74); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px)}
+.welcome[hidden]{display:none}
+.sheet{width:min(480px,100%); max-height:94vh; overflow:auto; background:#231C3F; border:1px solid var(--line); border-radius:32px 32px 0 0; padding:28px 20px calc(24px + env(safe-area-inset-bottom,0px)); animation:in 300ms ease-out}
+.sheet h1{font-size:32px; margin:4px 0 12px}
+.perm{display:flex; gap:14px; border-top:1px solid var(--line); padding:18px 0 6px}
+.perm .ic{width:44px; height:44px; border-radius:50%; background:var(--glass); border:1px solid var(--line); display:grid; place-items:center; color:var(--peach); flex:none}
+.perm svg{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.perm h2{font-size:18px} .perm p{margin:0 0 10px; color:var(--mut)} .st{color:var(--mut); font-size:14px}
+.modes{display:flex; gap:4px; padding:5px; border:1px solid var(--line); border-radius:999px; background:var(--glass); margin:0 0 8px}
+.modes button{flex:1; min-height:46px; padding:8px 4px; font-size:14px; color:var(--mut)}
+.modes button[aria-pressed=true]{background:var(--ink); color:#1B1633}
+.bars{display:flex; gap:10px; height:150px; margin:14px 0 4px}
+.b{flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; min-width:0}
+.b em{font-style:normal; font-size:13px; color:var(--mut)} .b time{font-size:13px; color:var(--mut)}
+.b i{display:block; width:100%; border-radius:10px 10px 4px 4px; background:rgba(143,224,192,.42); transition:height 500ms}
+.b i.hit{background:var(--mint)}
+.rit{display:flex; gap:10px; flex-wrap:wrap}
+
+/* ===== Premium layer: kedalaman, gerak, dan detail ===== */
+:root{--out:cubic-bezier(.22,.8,.3,1); --spring:cubic-bezier(.34,1.56,.64,1)}
+html{scroll-behavior:smooth}
+body::before{content:""; position:fixed; inset:-25%; z-index:-1; pointer-events:none;
+  background:radial-gradient(40% 35% at 25% 30%,rgba(150,120,230,.26),transparent 70%),radial-gradient(35% 30% at 78% 22%,rgba(255,180,143,.22),transparent 70%),radial-gradient(38% 32% at 60% 80%,rgba(90,70,170,.28),transparent 70%);
+  animation:drift 30s ease-in-out infinite alternate}
+body::after{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.55; mix-blend-mode:overlay;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
+@keyframes drift{to{transform:translate3d(4%,-3%,0) rotate(6deg) scale(1.08)}}
+h1{background:linear-gradient(180deg,#fff 25%,#C9BDF0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent}
+section{animation:none}
+section>*{animation:rise 750ms var(--out) both; animation-delay:calc(var(--i,0)*75ms + 40ms)}
+@keyframes rise{from{opacity:0; transform:translateY(22px) scale(.985)}}
+.wk li:nth-child(1){--i:1}.wk li:nth-child(2){--i:2}.wk li:nth-child(3){--i:3}.wk li:nth-child(4){--i:4}.wk li:nth-child(5){--i:5}.wk li:nth-child(6){--i:6}.wk li:nth-child(7){--i:7}
+.wk li{animation:rise 650ms var(--out) both; animation-delay:calc(var(--i,0)*55ms + 250ms)}
+
+/* Orb hidup */
+.orb::before{animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.1)}}
+.orb::after{content:""; position:absolute; inset:-12px; border-radius:50%; pointer-events:none;
+  background:conic-gradient(from 0deg,transparent 0 72%,rgba(255,180,143,.7) 100%);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),#000 calc(100% - 1.5px)); mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),#000 calc(100% - 1.5px));
+  animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb svg{filter:drop-shadow(0 0 9px rgba(255,180,143,.35))}
+.orb .num{text-shadow:0 0 30px rgba(255,180,143,.35)}
+
+/* Kartu kaca dengan tepi bergradasi */
+.panel{border:1px solid transparent; transition:transform 400ms var(--out), box-shadow 400ms;
+  background:linear-gradient(180deg,#261E47,#1E1839) padding-box, linear-gradient(160deg,rgba(255,255,255,.38),rgba(255,255,255,.05) 40%,rgba(255,180,143,.3)) border-box;
+  box-shadow:0 34px 60px -34px rgba(0,0,0,.7)}
+.panel:focus-within{box-shadow:0 34px 60px -30px rgba(255,180,143,.28)}
+@media(hover:hover){.panel:hover{transform:translateY(-3px)}}
+input[type=text],input[type=time],input[type=number],textarea{transition:border-color 200ms,box-shadow 250ms,background 200ms}
+input[type=text]:focus,input[type=time]:focus,input[type=number]:focus,textarea:focus{border-color:var(--peach); background:rgba(255,255,255,.1); box-shadow:0 0 0 5px rgba(255,180,143,.14)}
+
+/* Tombol: kilau, riak, pegas */
+button{position:relative; overflow:hidden; transition:transform 300ms var(--spring), background 200ms, box-shadow 250ms}
+button:active{transform:scale(.95)}
+.btn{background:linear-gradient(180deg,#FFC6A8,#FFA67C); box-shadow:0 16px 30px -12px rgba(255,160,120,.75), inset 0 1px 0 rgba(255,255,255,.5)}
+.btn::after{content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.5) 50%,transparent 65%); transform:translateX(-130%); animation:sheen 6s ease-in-out 2.5s infinite}
+@keyframes sheen{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+.rp{position:absolute; border-radius:50%; background:rgba(255,255,255,.3); transform:scale(0); animation:rp 650ms var(--out) forwards; pointer-events:none}
+@keyframes rp{to{transform:scale(1); opacity:0}}
+.ok{animation:popin 500ms var(--spring)}
+@keyframes popin{from{opacity:0; transform:scale(.8) translateY(4px)}}
+.chip{transition:transform 300ms var(--spring), background 250ms, color 250ms, border-color 250ms}
+.chip[aria-pressed=true]{box-shadow:0 10px 24px -10px rgba(242,238,251,.6)}
+.meal{transition:background 300ms}
+.meal:has(input:checked){background:linear-gradient(90deg,rgba(143,224,192,.09),transparent)}
+
+/* Gelas air: terisi berurutan */
+.g i{transition:background 300ms,border-color 300ms,box-shadow 400ms,transform 400ms var(--spring)}
+.g.on i{transition-delay:calc(var(--k,0)*40ms); animation:drop 650ms var(--spring) both; animation-delay:calc(var(--k,0)*40ms)}
+@keyframes drop{0%{transform:translateY(-8px) scale(.5); opacity:0}60%{transform:scale(1.18)}100%{transform:none; opacity:1}}
+
+/* Nav: indikator meluncur */
+.ind{position:absolute; top:6px; bottom:6px; left:6px; width:calc((100% - 12px)/5); border-radius:999px; pointer-events:none;
+  background:linear-gradient(180deg,#FFC6A8,#FFA67C); box-shadow:0 12px 24px -8px rgba(255,160,120,.8), inset 0 1px 0 rgba(255,255,255,.5);
+  transition:transform 560ms cubic-bezier(.34,1.4,.5,1)}
+nav button{position:relative; z-index:1; overflow:visible; transition:color 300ms}
+nav button[aria-selected=true]{background:transparent; color:#1B1633}
+nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
+@keyframes bob{from{transform:translateY(5px) scale(.8)}}
+
+/* Timer, toast, sambutan, grafik */
+.timer .pr{filter:drop-shadow(0 0 8px rgba(255,180,143,.65))}
+.toast{transition:opacity 300ms, transform 550ms var(--spring), visibility 300ms}
+.welcome{animation:fade 400ms ease-out}
+.sheet{animation:sheetUp 700ms var(--out)}
+@keyframes fade{from{opacity:0}}
+@keyframes sheetUp{from{transform:translateY(100%)}}
+.b i{transform-origin:bottom; transition:none; animation:grow 900ms var(--out) both; animation-delay:calc(var(--k,0)*80ms + 250ms)}
+@keyframes grow{from{transform:scaleY(0)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}
 </style>
 </head>
 <body>
-<div class="welcome" id="welcome" hidden>
+<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wH" hidden>
   <div class="sheet">
-    <div class="hero">
-      <span class="mono" aria-hidden="true">1%</span>
-      <div>
-        <p class="kicker">Selamat datang di Sepersen.</p>
-        <h1>Siapkan 2 hal kecil dulu.</h1>
-      </div>
-    </div>
-    <p class="sub">Semua boleh dilewati. Sepersen tetap jalan penuh tanpa satu pun izin ini. Data cuma di HP, tidak dikirim ke mana pun.</p>
-    <div class="perm">
-      <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span>
-      <div style="flex:1">
-        <h2>Pengingat makan</h2>
-        <p>HP mengingatkan di jam makan saat Sepersen terbuka.</p>
-        <p class="row"><button class="btn quiet" id="wNotif">Nyalakan pengingat</button><span class="st" id="wNotifSt">Status: mati</span></p>
-      </div>
-    </div>
-    <div class="perm">
-      <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 14c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1.2 4-.8"/><path d="M12 3v8"/></svg></span>
-      <div style="flex:1">
-        <h2>Getar momen penting</h2>
-        <p>Target air, jurnal, dan timer selesai terasa dirayakan. Coba dulu di sini.</p>
-        <p class="row"><button class="btn quiet" id="wBuzz">Coba getar</button><span class="st" id="wBuzzSt">Status: belum dicoba</span></p>
-      </div>
-    </div>
-    <p class="row"><button class="btn" id="wStart">Mulai pakai Sepersen</button></p>
-    <p><button class="btn ghost" id="wLater">Lewati semua</button></p>
+    <p class="date">Selamat datang di Sepersen.</p>
+    <h1 id="wH">Siapkan 2 hal kecil dulu.</h1>
+    <p class="mut">Semua boleh dilewati. Sepersen tetap jalan penuh tanpa satu pun izin ini. Data cuma di HP, tidak dikirim ke mana pun.</p>
+    <div class="perm"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span><div style="flex:1"><h2>Pengingat makan</h2><p>HP mengingatkan di jam makan saat Sepersen terbuka.</p><p class="row"><button class="ghost" id="wNotif">Nyalakan pengingat</button><span class="st" id="wNotifSt">Status: mati</span></p></div></div>
+    <div class="perm"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1.2 4-.8"/><path d="M12 3v8"/></svg></span><div style="flex:1"><h2>Getar momen penting</h2><p>Target air, jurnal, dan timer selesai terasa dirayakan. Coba dulu di sini.</p><p class="row"><button class="ghost" id="wBuzz">Coba getar</button><span class="st" id="wBuzzSt">Status: belum dicoba</span></p></div></div>
+    <p class="row" style="margin:14px 0 8px"><button class="btn" id="wStart">Mulai pakai Sepersen</button><button class="ghost" id="wLater">Lewati semua</button></p>
   </div>
 </div>
-<div class="wrap" id="top">
+<div class="wrap">
 
-  <section data-screen="home" aria-label="Hari ini">
-    <div class="hero">
-      <span class="mono" aria-hidden="true">1%</span>
-      <div>
-        <h1>Satu hal kecil hari ini sudah cukup.</h1>
-      </div>
+<section id="home">
+  <p class="date" id="greet"></p>
+  <h1>Satu hal kecil hari ini sudah cukup.</h1>
+  <div class="orb boot" id="orb" role="img" aria-label="Kemajuan hari ini">
+    <svg viewBox="0 0 220 220" aria-hidden="true" id="segs"></svg>
+    <div><div class="num" id="cnt">0</div><small>dari 11 hal kecil</small></div>
+  </div>
+  <div class="panel">
+    <h2>Win 1% hari ini</h2>
+    <label class="f" for="win">Satu hal kecil yang beres</label>
+    <input type="text" id="win" maxlength="140" placeholder="Contoh: rapikan kasur setelah bangun" autocomplete="off">
+    <p class="row" style="margin:14px 0 0"><button class="btn" id="winSave">Simpan win</button><span class="ok" id="winOk" hidden>Tersimpan.</span></p>
+  </div>
+  <div class="sec">
+    <h2>Energimu sekarang</h2>
+    <p class="mut">Pilih yang paling dekat, 10 detik saja.</p>
+    <div class="chips" id="moods" role="group" aria-label="Pilih energi">
+      <button class="chip" data-m="Segar">Segar</button><button class="chip" data-m="Tenang">Tenang</button><button class="chip" data-m="Biasa">Biasa</button><button class="chip" data-m="Lelah">Lelah</button><button class="chip" data-m="Berat">Berat</button>
     </div>
+  </div>
+  <div class="sec">
+    <h2>Makan</h2>
+    <label class="meal"><input type="checkbox" data-meal="0"><span>Sarapan</span><time data-t="0"></time></label>
+    <label class="meal"><input type="checkbox" data-meal="1"><span>Makan siang</span><time data-t="1"></time></label>
+    <label class="meal"><input type="checkbox" data-meal="2"><span>Makan malam</span><time data-t="2"></time></label>
+  </div>
+  <div class="sec">
+    <h2>Air putih</h2>
+    <p class="mut" id="wTxt" aria-live="polite"></p>
+    <div class="glasses" id="glasses" role="group" aria-label="Gelas air"></div>
+  </div>
+<div class="sec">
+    <h2>Ritual pagi</h2>
+    <label class="meal"><input type="checkbox" data-r="0"><span>Bangun tanpa scroll</span></label>
+    <label class="meal"><input type="checkbox" data-r="1"><span>Minum air putih</span></label>
+    <label class="meal"><input type="checkbox" data-r="2"><span>Rapikan kasur</span></label>
+  </div>
+<div class="sec">
+    <h2>Ritual malam</h2>
+    <label class="meal"><input type="checkbox" data-r="3"><span>Taruh HP di luar kamar</span></label>
+    <label class="meal"><input type="checkbox" data-r="4"><span>Tulis jurnal 1 menit</span></label>
+    <label class="meal"><input type="checkbox" data-r="5"><span>Tidur sebelum larut</span></label>
+  </div>
+  <div class="sec">
+    <h2>Mulai dari sini</h2>
+    <p class="rit"><button class="ghost" data-go="jurnal">Tulis jurnal 1 menit</button><button class="ghost" data-go="bengong">Bengong 10 menit</button><button class="ghost" data-go="fokus">Fokus 15 menit</button></p>
+  </div>
+</section>
 
-    <div class="card hero-card">
-      <h2>Win 1% hari ini</h2>
-      <label class="f" for="win">Satu hal kecil yang beres</label>
-      <input type="text" id="win" maxlength="140" placeholder="Contoh: rapikan kasur setelah bangun" autocomplete="off">
-      <p class="row" style="margin-top:12px"><button class="btn" id="winSave">Simpan win hari ini</button>
-      <span class="saved" id="winDone" hidden>Tersimpan.</span></p>
-    </div>
+<section id="jurnal" hidden>
+  <p class="date">Malam hari, sebelum tidur.</p>
+  <h1>Jurnal 1 menit</h1>
+  <p class="mut">Tiga pertanyaan, satu kalimat tiap pertanyaan sudah cukup.</p>
+  <div class="panel">
+    <label class="f" for="j1">Apa yang kamu syukuri hari ini</label><textarea id="j1" maxlength="500"></textarea>
+    <label class="f" for="j2">Apa pelajaran kecilnya</label><textarea id="j2" maxlength="500"></textarea>
+    <label class="f" for="j3">Apa satu hal baik untuk besok</label><textarea id="j3" maxlength="500"></textarea>
+    <p class="row" style="margin:14px 0 0"><button class="btn" id="jSave">Simpan jurnal</button><span class="ok" id="jOk" hidden>Tersimpan. Tidur yang cukup ya.</span></p>
+  </div>
+  <h2>Jurnal sebelumnya</h2><div id="hist"></div>
+</section>
 
-    <div class="card flat">
-      <h2>Energimu sekarang</h2>
-      <div class="chips" role="group" aria-label="Pilih mood" id="moods">
-        <button class="chip" data-mood="segar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v8"/><path d="M8.5 15.5c1 1.2 2.2 1.8 3.5 1.8s2.5-.6 3.5-1.8"/></svg> Segar</button>
-        <button class="chip" data-mood="tenang"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8 14c1.2 1 2.6 1.5 4 1.5s2.8-.5 4-1.5"/><path d="M9 9.5h.01M15 9.5h.01"/></svg> Tenang</button>
-        <button class="chip" data-mood="biasa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8.5 12.5h7"/></svg> Biasa</button>
-        <button class="chip" data-mood="lelah"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M9 9.5h.01M15 9.5h.01"/><path d="M8.5 16c1.2-1 2.6-1.5 3.5-1.5"/></svg> Lelah</button>
-        <button class="chip" data-mood="berat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 14c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1.2 4-.8"/><path d="M4 18c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1.2 4-.8"/><path d="M12 3v5"/></svg> Berat</button>
-      </div>
-    </div>
+<section id="bengong" hidden>
+  <p class="date">Pagi hari, sebelum cek HP.</p>
+  <h1 id="tTitle">Bengong 10 menit</h1>
+  <p class="mut" id="tDesc">Duduk diam, tatap tembok, tidak perlu melakukan apa pun.</p>
+  <div class="modes" id="modes" role="group" aria-label="Pilih timer"><button data-mode="bengong" aria-pressed="true">Bengong 10</button><button data-mode="fokus" aria-pressed="false">Fokus 15</button><button data-mode="rem" aria-pressed="false">Rem 10</button></div>
+  <div class="timer" id="timer">
+    <svg viewBox="0 0 220 220" aria-hidden="true"><circle class="tr" cx="110" cy="110" r="100"/><circle class="pr" id="pr" cx="110" cy="110" r="100"/></svg>
+    <div class="num" id="tShow" aria-live="off">10:00</div>
+  </div>
+  <p class="row center"><button class="btn" id="tStart">Mulai bengong</button><button class="ghost" id="tPause" hidden>Jeda</button><button class="ghost" id="tEnd" hidden>Selesai lebih awal</button></p>
+  <p class="mut center" id="tMsg" aria-live="polite"></p>
+</section>
 
-    <div class="card flat">
-      <h2>Makan dan minum</h2>
-      <div class="checkline"><input type="checkbox" id="mPagi"><label for="mPagi">Sarapan</label></div>
-      <div class="checkline"><input type="checkbox" id="mSiang"><label for="mSiang">Makan siang</label></div>
-      <div class="checkline"><input type="checkbox" id="mMalam"><label for="mMalam">Makan malam</label></div>
-      <div class="water">
-        <div><strong>Air putih</strong><br><span class="sub" id="waterT">Target: 8 gelas</span></div>
-        <div class="row" style="margin-left:auto">
-          <span class="waternum" id="waterN" aria-live="polite">0</span>
-          <button class="btn quiet" id="waterAdd">Tambah satu gelas</button>
-        </div>
-        <div class="waterbar" aria-hidden="true"><span id="waterBar"></span></div>
-      </div>
-    </div>
+<section id="ingat" hidden>
+  <p class="date">Diatur sekali, jalan tiap hari.</p>
+  <h1>Pengingat makan dan minum</h1>
+  <p class="mut">Pengingat bunyi saat Sepersen terbuka di HP. Atur jam sesuai kebiasaanmu.</p>
+  <div class="panel">
+    <label class="f" for="s0">Sarapan pukul</label><input type="time" id="s0">
+    <label class="f" for="s1">Makan siang pukul</label><input type="time" id="s1">
+    <label class="f" for="s2">Makan malam pukul</label><input type="time" id="s2">
+    <label class="f" for="sw">Target air putih per hari (gelas)</label><input type="number" id="sw" min="1" max="20">
+    <p class="row" style="margin:14px 0 6px"><button class="btn" id="sSave">Simpan pengaturan</button><button class="ghost" id="notif">Nyalakan pengingat</button></p>
+    <p class="mut" id="nState" style="margin:0"></p>
+  </div>
+</section>
 
-    <div class="card flat">
-      <h2>Ritual pagi</h2>
-      <div class="checkline"><input type="checkbox" id="rBangun"><label for="rBangun">Bangun tanpa scroll</label></div>
-      <div class="checkline"><input type="checkbox" id="rAir"><label for="rAir">Minum air putih</label></div>
-      <div class="checkline"><input type="checkbox" id="rKasur"><label for="rKasur">Rapikan kasur</label></div>
-    </div>
-
-    <div class="card flat">
-      <h2>Ritual malam</h2>
-      <div class="checkline"><input type="checkbox" id="rHp"><label for="rHp">Taruh HP di luar kamar</label></div>
-      <div class="checkline"><input type="checkbox" id="rJurnal"><label for="rJurnal">Tulis jurnal 1 menit</label></div>
-      <div class="checkline"><input type="checkbox" id="rTidur"><label for="rTidur">Tidur sebelum larut</label></div>
-    </div>
-
-    <div class="card flat">
-      <h2>Mulai dari sini</h2>
-      <p class="row">
-        <button class="btn ghost" data-go="jurnal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6"/></svg> Tulis jurnal 1 menit</button>
-        <button class="btn ghost" data-go="bengong"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/></svg> Bengong 10 menit</button>
-        <button class="btn ghost" data-go="fokus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 3"/></svg> Fokus 15 menit</button>
-      </p>
-    </div>
-  </section>
-
-  <section data-screen="jurnal" aria-label="Jurnal" hidden>
-    <h1>Jurnal 1 menit</h1>
-    <div class="card hero-card">
-      <label class="f" for="j1">Apa yang kamu syukuri hari ini</label>
-      <textarea id="j1" maxlength="500"></textarea>
-      <label class="f" for="j2">Apa pelajaran kecilnya</label>
-      <textarea id="j2" maxlength="500"></textarea>
-      <label class="f" for="j3">Apa satu hal baik untuk besok</label>
-      <textarea id="j3" maxlength="500"></textarea>
-      <p class="row" style="margin-top:12px"><button class="btn" id="jSave">Simpan jurnal</button>
-      <span class="saved" id="jDone" hidden>Tersimpan. Tidur yang cukup ya.</span></p>
-    </div>
-    <div class="card">
-      <h2>Jurnal sebelumnya</h2>
-      <div id="hist"><p class="sub">Belum ada jurnal. Tulis yang pertama malam ini, cukup tiga kalimat.</p></div>
-    </div>
-  </section>
-
-  <section data-screen="bengong" aria-label="Bengong" hidden>
-    <h1 id="tTitle">Bengong 10 menit</h1>
-    <div class="card flat">
-      <div class="seg" role="group" aria-label="Pilih timer" id="tSeg">
-        <button data-t="bengong" aria-pressed="true">Bengong 10</button>
-        <button data-t="fokus" aria-pressed="false">Fokus 15</button>
-        <button data-t="rem" aria-pressed="false">Rem 10</button>
-      </div>
-    </div>
-    <div class="dark">
-      <span class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="track" cx="60" cy="60" r="54"/><circle class="prog" id="tRing" cx="60" cy="60" r="54"/></svg><span class="halo"><span class="timer" id="tShow" aria-live="polite">10:00</span></span></span>
-      <p class="row" style="justify-content:center">
-        <button class="btn" id="tStart">Mulai bengong</button>
-        <button class="btn ghost" id="tPause" hidden>Jeda</button>
-        <button class="btn ghost" id="tEnd" hidden>Selesai lebih awal</button>
-      </p>
-      <p id="tMsg" style="margin:12px 0 0"></p>
-    </div>
-  </section>
-
-  <section data-screen="ingat" aria-label="Pengingat" hidden>
-    <h1>Pengingat makan dan minum</h1>
-    <div class="card hero-card">
-      <label class="f" for="sPagi">Sarapan pukul</label>
-      <input type="time" id="sPagi" value="07:00">
-      <label class="f" for="sSiang">Makan siang pukul</label>
-      <input type="time" id="sSiang" value="12:00">
-      <label class="f" for="sMalam">Makan malam pukul</label>
-      <input type="time" id="sMalam" value="19:00">
-      <label class="f" for="sWater">Target air putih per hari (gelas)</label>
-      <input type="number" id="sWater" min="1" max="20" value="8">
-      <p class="row" style="margin-top:12px">
-        <button class="btn" id="sSave">Simpan pengaturan</button>
-        <button class="btn ghost" id="notif">Nyalakan pengingat</button>
-      </p>
-      <p class="sub" id="notifState">Pengingat mati. Nyalakan agar HP mengingatkan di jam makan.</p>
-    </div>
-  </section>
-
-  <section data-screen="ringkas" aria-label="Ringkasan" hidden>
-    <h1>Ringkasan 1%</h1>
-    <p class="sub" id="sumLine">Belum ada catatan minggu ini. Mulai dari win kecil hari ini.</p>
-    <div class="card hero-card">
-      <h2>Hitungan jujur</h2>
-      <p class="statline" id="sumStats"></p>
-    </div>
-    <div class="card hero-card">
-      <h2>Air 7 hari</h2>
-      <div class="bars" id="sumBars" role="img" aria-label="Grafik batang air putih 7 hari, dibaca dari kiri ke kanan"></div>
-    </div>
-    <div class="card">
-      <h2>Tujuh hari</h2>
-      <ul class="week" id="sumWeek"></ul>
-    </div>
-  </section>
+<section id="ringkas" hidden>
+  <p class="date">Tujuh hari terakhir, dibaca pelan-pelan.</p>
+  <h1>Ringkasan 1%</h1>
+  <p class="mut" id="sumLine"></p>
+  <div class="stats" id="stats"></div>
+  <h2 style="margin-top:22px">Air 7 hari</h2>
+  <div class="bars" id="bars" role="img" aria-label="Grafik air putih 7 hari"></div>
+  <h2 style="margin-top:22px">Tujuh hari</h2>
+  <ul class="wk" id="wk"></ul>
+</section>
 
 </div>
-
 <div class="toast" id="toast" role="status"></div>
-
-<nav class="tabs" aria-label="Navigasi utama">
-  <button data-tab="home" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg><span>Hari Ini</span></button>
-  <button data-tab="jurnal" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6"/></svg><span>Jurnal</span></button>
-  <button data-tab="bengong" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/></svg><span>Bengong</span></button>
-  <button data-tab="ingat" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span>Ingat</span></button>
-  <button data-tab="ringkas" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg><span>Ringkas</span></button>
+<nav aria-label="Navigasi utama">
+  <button data-tab="home" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>Hari Ini</button>
+  <button data-tab="jurnal" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6"/></svg>Jurnal</button>
+  <button data-tab="bengong" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/></svg>Bengong</button>
+  <button data-tab="ingat" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>Ingat</button>
+  <button data-tab="ringkas" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Ringkas</button>
 </nav>
 
-<script src="app.js" defer></script>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const K='sepersen:v2', esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S; try{S=JSON.parse(localStorage.getItem(K))}catch{}
+S=S||{}; S.days=S.days||{}; S.set=Object.assign({t:['07:00','12:00','19:00'],w:8,n:false,h:false,seen:false},S.set);
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch{}};
+const dk=d=>new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const T=dk(new Date()), blank=()=>({win:'',mood:'',m:[0,0,0],w:0,j:null,r:[0,0,0,0,0,0],calm:0,fokus:0,rem:0});
+const D=(k=T)=>S.days[k]=Object.assign(blank(),S.days[k]);
+const done=d=>[!!d.win,...d.m.map(Boolean),d.w>=S.set.w,...d.r.map(Boolean)];
+const N=11, buzz=p=>{if(S.set.h&&navigator.vibrate)navigator.vibrate(p)};
+let tt; const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2400)};
+const flash=id=>{const e=$(id);e.hidden=false;setTimeout(()=>e.hidden=true,2600)};
+
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function tween(el,to,ms=700){const from=+el.dataset.v||0;el.dataset.v=to;if(RM||from===to){el.textContent=to;return}const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-p,3);el.textContent=Math.round(from+(to-from)*e);if(p<1)requestAnimationFrame(f)})(t0)}
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('.btn,.ghost,.chip');if(!b||RM)return;const r=b.getBoundingClientRect(),z=Math.max(r.width,r.height)*2.2,s=document.createElement('span');s.className='rp';s.style.cssText=`width:${z}px;height:${z}px;left:${e.clientX-r.left-z/2}px;top:${e.clientY-r.top-z/2}px`;b.appendChild(s);setTimeout(()=>s.remove(),700)});
+
+/* Orb: 11 segmen = 11 hal kecil */
+const C=2*Math.PI*88, SEG=C/N-9;
+$('#segs').innerHTML=[...Array(N)].map((_,i)=>`<circle class="sg" cx="110" cy="110" r="88" stroke-dasharray="${SEG} ${C-SEG}" transform="rotate(${i*360/N-88} 110 110)" style="--d:${i*80+200}ms"/>`).join('');
+setTimeout(()=>$('#orb').classList.remove('boot'),1800);
+
+function home(){
+  const d=D(), h=new Date().getHours(), f=done(d), n=f.filter(Boolean).length;
+  $('#greet').textContent=(h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam')+' · '+new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});
+  $$('.sg').forEach((s,i)=>s.classList.toggle('on',f[i]));
+  tween($('#cnt'),n); $('#orb').style.setProperty('--p',n/N);
+  $('#win').value=d.win;
+  $$('#moods .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.m===d.mood));
+  $$('[data-meal]').forEach(c=>c.checked=!!d.m[c.dataset.meal]);
+  $$('[data-r]').forEach(c=>c.checked=!!d.r[c.dataset.r]);
+  $$('[data-t]').forEach(t=>t.textContent=S.set.t[t.dataset.t]);
+  $('#wTxt').textContent=d.w+' dari '+S.set.w+' gelas';
+  const gl=$('#glasses'), gn=Math.max(S.set.w,d.w);
+  if(gl.children.length!==gn)gl.innerHTML=[...Array(gn)].map((_,i)=>`<button class="g" data-g="${i}" style="--k:${i}" aria-label="Gelas ${i+1}"><i></i></button>`).join('');
+  [...gl.children].forEach((b,i)=>{b.classList.toggle('on',i<d.w);b.setAttribute('aria-pressed',i<d.w)});
+}
+$('#winSave').onclick=()=>{const v=$('#win').value.trim();if(!v)return toast('Tulis dulu satu hal kecilnya.');D().win=v;save();home();flash('#winOk');toast('Win tersimpan.')};
+$('#moods').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const d=D();d.mood=d.mood===b.dataset.m?'':b.dataset.m;save();home()};
+$$('[data-meal]').forEach(c=>c.onchange=()=>{D().m[c.dataset.meal]=c.checked?1:0;save();home()});
+$$('[data-r]').forEach(c=>c.onchange=()=>{D().r[c.dataset.r]=c.checked?1:0;save();home()});
+$('#glasses').onclick=e=>{const b=e.target.closest('.g');if(!b)return;const d=D(),i=+b.dataset.g,was=d.w;d.w=d.w===i+1?i:i+1;save();home();if(was<S.set.w&&d.w>=S.set.w){buzz([40,60,40]);toast('Target air hari ini tercapai.')}};
+$$('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;go(g==='fokus'?'bengong':g);if(g==='fokus')setMode('fokus')});
+
+/* Jurnal */
+const fmt=k=>new Date(k+'T00:00:00').toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'});
+function jurnal(){
+  const j=D().j||{}; ['a','b','c'].forEach((k,i)=>$('#j'+(i+1)).value=j[k]||'');
+  const ks=Object.keys(S.days).filter(k=>k!==T&&S.days[k].j).sort().reverse().slice(0,10);
+  $('#hist').innerHTML=ks.length?ks.map(k=>{const j=S.days[k].j;return `<div class="hist"><time>${fmt(k)}</time><p>${esc(j.a||'')}</p><p>${esc(j.b||'')}</p><p>${esc(j.c||'')}</p></div>`}).join(''):'<p class="mut">Belum ada jurnal sebelumnya. Tulis yang pertama malam ini, cukup tiga kalimat.</p>';
+}
+$('#jSave').onclick=()=>{const j={a:$('#j1').value.trim(),b:$('#j2').value.trim(),c:$('#j3').value.trim()};if(!j.a&&!j.b&&!j.c)return toast('Isi minimal satu kalimat dulu.');const d=D();d.j=j;d.r[4]=1;save();flash('#jOk');buzz([60,40,60]);toast('Jurnal tersimpan.')};
+
+/* Timer: 3 mode */
+const M={
+  bengong:{m:10,k:'calm',t:'Bengong 10 menit',go:'Mulai bengong',d:'Duduk diam, tatap tembok, tidak perlu melakukan apa pun.',ok:'Selesai. Sepuluh menit tanpa layar, itu sudah cukup.'},
+  fokus:{m:15,k:'fokus',t:'Fokus 15 menit',go:'Mulai fokus',d:'Satu tugas saja. Notifikasi dimatikan, sisanya menunggu.',ok:'Selesai. Lima belas menit fokus, istirahat sebentar ya.'},
+  rem:{m:10,k:'rem',t:'Rem 10 menit',go:'Mulai rem',d:'Berhenti sebentar: berdiri, minum, lihat yang jauh.',ok:'Selesai. Badanmu bilang terima kasih.'}
+};
+let mode='bengong', TOTAL=600, rem=600, end=0, iv=0; const CR=2*Math.PI*100;
+$('#pr').style.strokeDasharray=CR;
+const paint=()=>{const s=Math.max(0,Math.ceil(rem));$('#tShow').textContent=String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');$('#pr').style.strokeDashoffset=CR*(1-rem/TOTAL)};
+const ui=r=>{$('#timer').classList.toggle('run',r);$('#tStart').hidden=r;$('#tPause').hidden=!r;$('#tEnd').hidden=!(r||rem<TOTAL)};
+function stop(){clearInterval(iv);iv=0}
+function setMode(m){stop();mode=m;TOTAL=rem=M[m].m*60;$('#tTitle').textContent=M[m].t;$('#tDesc').textContent=M[m].d;$('#tStart').textContent=M[m].go;$('#tMsg').textContent='';$$('#modes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));paint();ui(false)}
+function finish(full){stop();const x=M[mode],min=full?x.m:Math.floor((TOTAL-rem)/60);D()[x.k]+=min;save();rem=TOTAL;paint();ui(false);$('#tStart').textContent=x.go;$('#tMsg').textContent=full?x.ok:'Selesai lebih awal. Tidak apa-apa, tetap dihitung.';if(full)buzz([200,100,200])}
+$('#tStart').onclick=()=>{end=Date.now()+rem*1000;$('#tMsg').textContent='';iv=setInterval(()=>{rem=(end-Date.now())/1000;if(rem<=0){rem=0;finish(true)}else paint()},250);ui(true)};
+$('#tPause').onclick=()=>{stop();ui(false);$('#tStart').textContent='Lanjut'};
+$('#tEnd').onclick=()=>finish(false);
+$('#modes').onclick=e=>{const b=e.target.closest('button');if(b&&b.dataset.mode!==mode)setMode(b.dataset.mode)};
+
+/* Pengingat + izin */
+function ingat(){S.set.t.forEach((t,i)=>$('#s'+i).value=t);$('#sw').value=S.set.w;nstate()}
+function nstate(){const p='Notification' in window?Notification.permission:'none', on=S.set.n&&p==='granted';
+  $('#nState').textContent=p==='none'?'Browser ini belum mendukung notifikasi.':p==='denied'?'Notifikasi diblokir. Izinkan lewat pengaturan browser atau aplikasi.':on?'Pengingat menyala. Bunyi saat Sepersen terbuka.':'Pengingat mati. Nyalakan agar HP mengingatkan di jam makan.';
+  $('#wNotifSt').textContent='Status: '+(p==='denied'?'ditolak':on?'menyala':'mati')}
+async function reqNotif(){if(!('Notification' in window))return nstate();const p=await Notification.requestPermission();S.set.n=p==='granted';save();nstate()}
+$('#notif').onclick=reqNotif; $('#wNotif').onclick=reqNotif;
+$('#sSave').onclick=()=>{S.set.t=[0,1,2].map(i=>$('#s'+i).value||S.set.t[i]);S.set.w=Math.min(20,Math.max(1,+$('#sw').value||8));save();toast('Pengaturan tersimpan.')};
+const fired={}; setInterval(()=>{const n=new Date(),hm=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');S.set.t.forEach((t,i)=>{if(t!==hm||fired[T+i])return;fired[T+i]=1;const m=['sarapan','makan siang','makan malam'][i];toast('Waktunya '+m+'.');if(S.set.n&&Notification.permission==='granted')new Notification('Sepersen',{body:'Waktunya '+m+'.'})})},20000);
+
+/* Sambutan */
+const closeWelcome=()=>{S.set.seen=true;save();$('#welcome').hidden=true};
+$('#wBuzz').onclick=()=>{if(navigator.vibrate){navigator.vibrate(60);S.set.h=true;save();$('#wBuzzSt').textContent='Status: menyala'}else $('#wBuzzSt').textContent='Status: perangkat tidak mendukung'};
+$('#wStart').onclick=closeWelcome; $('#wLater').onclick=closeWelcome;
+if(!S.set.seen){$('#welcome').hidden=false;$('#wStart').focus()}
+
+/* Ringkas */
+function ringkas(){
+  const ks=[...Array(7)].map((_,i)=>dk(new Date(Date.now()-(6-i)*864e5))), ds=ks.map(k=>Object.assign(blank(),S.days[k])), sum=f=>ds.reduce((a,d)=>a+f(d),0);
+  $('#sumLine').textContent=ds.some(d=>done(d).some(Boolean))?'Tanpa skor, tanpa streak yang hangus. Ini hitungan jujurnya.':'Belum ada catatan minggu ini. Mulai dari satu win kecil hari ini.';
+  $('#stats').innerHTML=[[sum(d=>d.win?1:0),'win kecil'],[sum(d=>d.j?1:0),'jurnal'],[sum(d=>d.w),'gelas air'],[sum(d=>d.r.filter(Boolean).length),'ritual beres'],[sum(d=>d.calm),'menit bengong'],[sum(d=>d.fokus),'menit fokus']].map(([n,l])=>`<div><div class="num">${n}</div><span>${l}</span></div>`).join('');
+  $$('#stats .num').forEach(e=>{const v=+e.textContent;e.dataset.v=0;tween(e,v,900)});
+  $('#bars').setAttribute('aria-label','Air putih 7 hari: '+ds.map((d,i)=>fmt(ks[i])+' '+d.w+' gelas').join(', '));
+  $('#bars').innerHTML=ds.map((d,i)=>`<div class="b"><em>${d.w}</em><i class="${d.w>=S.set.w?'hit':''}" style="--k:${i};height:${d.w?Math.max(5,Math.min(100,d.w/S.set.w*100)):0}%"></i><time>${new Date(ks[i]+'T00:00:00').toLocaleDateString('id-ID',{weekday:'short'})}</time></div>`).join('');
+  $('#wk').innerHTML=ks.map((k,i)=>`<li><time>${new Date(k+'T00:00:00').toLocaleDateString('id-ID',{weekday:'short'})}</time><span class="w">${ds[i].win?esc(ds[i].win):'<span class="mut">Belum ada catatan</span>'}</span><span class="pips" aria-label="${done(ds[i]).filter(Boolean).length} dari ${N}">${done(ds[i]).map(x=>`<i class="${x?'on':''}"></i>`).join('')}</span></li>`).reverse().join('');
+}
+
+/* Navigasi */
+const views={home,jurnal,bengong:()=>{},ingat,ringkas};
+function go(t){$$('main,section').forEach(s=>s.hidden=s.id!==t);$$('[data-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));views[t]();[...$('#'+t).children].forEach((c,i)=>c.style.setProperty('--i',i));$('#ind').style.transform='translateX('+100*$$('[data-tab]').findIndex(b=>b.dataset.tab===t)+'%)';scrollTo({top:0,behavior:RM?'auto':'smooth'})}
+$$('[data-tab]').forEach(b=>b.onclick=()=>go(b.dataset.tab));
+$('nav').insertAdjacentHTML('afterbegin','<i class="ind" id="ind" aria-hidden="true"></i>');
+[...$('#home').children].forEach((c,i)=>c.style.setProperty('--i',i));
+home(); setMode('bengong'); nstate();
+</script>
 </body>
 </html>
