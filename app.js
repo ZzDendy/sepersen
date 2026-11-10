@@ -409,6 +409,13 @@
     welcome.hidden = false;
     paintWelcome();
     reveal("home");
+    const items = welcome.querySelectorAll(":scope > .sheet > .hero, :scope > .sheet > .perm, :scope > .sheet > p");
+    if (!reduced.matches) {
+      items.forEach((el, i) => {
+        el.classList.add("rv");
+        revealTimers.push(setTimeout(() => el.classList.add("in"), 40 + i * 60));
+      });
+    }
   }
   async function askNotif() {
     if (!("Notification" in window)) return;
