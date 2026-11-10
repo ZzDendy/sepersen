@@ -71,7 +71,12 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 20px. Bottom nav 5 tujua
 - Grafik 600ms + jeda 50ms, breakpoint 380px. Alasan: tetap hidup tapi selesai cepat.
 
 ## Ide Kilat + Niat pengingat
-- Ide Kilat di Beranda: kolom 1 baris + Catat, daftar terbaru di atas, Beres pindah jadi win hari ini (lalu ide dihapus), Hapus buang ide. Maks 50 ide. Alasan: ide lewat tidak hilang, satu ketuk jadi win tanpa ketik ulang.
+- Ide Kilat: kolom 1 baris + Catat, daftar terbaru di atas. Tiap ide punya Beres (pindah jadi win hari ini lalu ide dihapus), Jadi niat (isi kolom niat + fokus jam), dan Hapus. Maks 50 ide. Alasan: ide lewat tidak hilang, satu ketuk jadi win atau alarm tanpa ketik ulang.
 - Niat: mau apa + jam + Sekali saja/Tiap hari + Pasang pengingat. Daftar tampil jam + ulang + status bunyi + Hapus. Alasan: niat seperti masak nasi habis solat jadi alarm beneran.
 - Sekali saja pakai exact sekali jalan; tiap hari pakai inexact harian + dijadwal ulang tiap berbunyi dan reboot. Alasan: tepat untuk sekali, hemat baterai untuk harian.
 - Fix pindah win: sempat tidak tampil karena home() tidak dipanggil; sekarang panggil home() + ide ikut terhapus agar tidak dobel.
+
+## Milik pemakai: ritual, hari berat, cadangan
+- Ritual bisa diganti: tiap baris punya tombol Ubah, isi nama baru atau kosongkan untuk mematikan. Kosong = baris redup, kotak mati, tidak dihitung di orb. Alasan: ritual tetap bukan cocok untuk semua orang, jadi pemilik app yang menentukan.
+- Mode hari berat: pilih Lelah atau Berat, Beranda menyusut jadi win, makan, air saja; ritual, ide, niat menunggu. Muncul satu win lama sebagai pengingat. Alasan: hari berat butuh lebih sedikit, bukan lebih banyak.
+- Cadangan: tombol Ekspor data (JSON ke Unduhan; di APK lewat jembatan unduh, di browser lewat unduhan biasa) dan Impor data (pilih berkas, ganti semua data). Alasan: data cuma di localStorage, hilang kalau cache dibersihkan atau ganti HP.

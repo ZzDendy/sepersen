@@ -128,6 +128,8 @@ nav button[aria-selected=true]{color:#1B1633; background:var(--peach)}
 .b i{display:block; width:100%; border-radius:10px 10px 4px 4px; background:rgba(143,224,192,.42); transition:height 500ms}
 .b i.hit{background:var(--mint)}
 .rit{display:flex; gap:10px; flex-wrap:wrap}
+.ubah{min-height:38px; padding:4px 12px; font-size:13px; opacity:.7; flex:none}
+body.heavy .opsional{display:none}
 
 /* ===== Premium layer: kedalaman, gerak, dan detail ===== */
 :root{--out:cubic-bezier(.22,.8,.3,1); --spring:cubic-bezier(.34,1.56,.64,1)}
@@ -219,6 +221,7 @@ nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
     <svg viewBox="0 0 220 220" aria-hidden="true" id="segs"></svg>
     <div><div class="num" id="cnt">0</div><small>dari 11 hal kecil</small></div>
   </div>
+  <p class="mut" id="heavyNote" hidden></p>
   <div class="panel">
     <h2>Win 1% hari ini</h2>
     <label class="f" for="win">Satu hal kecil yang beres</label>
@@ -243,26 +246,26 @@ nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
     <p class="mut" id="wTxt" aria-live="polite"></p>
     <div class="glasses" id="glasses" role="group" aria-label="Gelas air"></div>
   </div>
-<div class="sec">
+<div class="sec opsional">
     <h2>Ritual pagi</h2>
-    <label class="meal"><input type="checkbox" data-r="0"><span>Bangun tanpa scroll</span></label>
-    <label class="meal"><input type="checkbox" data-r="1"><span>Minum air putih</span></label>
-    <label class="meal"><input type="checkbox" data-r="2"><span>Rapikan kasur</span></label>
+    <label class="meal"><input type="checkbox" data-r="0"><span data-rl="0">Bangun tanpa scroll</span><button class="ghost ubah" data-rubah="0" aria-label="Ubah ritual pagi 1">Ubah</button></label>
+    <label class="meal"><input type="checkbox" data-r="1"><span data-rl="1">Minum air putih</span><button class="ghost ubah" data-rubah="1" aria-label="Ubah ritual pagi 2">Ubah</button></label>
+    <label class="meal"><input type="checkbox" data-r="2"><span data-rl="2">Rapikan kasur</span><button class="ghost ubah" data-rubah="2" aria-label="Ubah ritual pagi 3">Ubah</button></label>
   </div>
-<div class="sec">
+<div class="sec opsional">
     <h2>Ritual malam</h2>
-    <label class="meal"><input type="checkbox" data-r="3"><span>Taruh HP di luar kamar</span></label>
-    <label class="meal"><input type="checkbox" data-r="4"><span>Tulis jurnal 1 menit</span></label>
-    <label class="meal"><input type="checkbox" data-r="5"><span>Tidur sebelum larut</span></label>
+    <label class="meal"><input type="checkbox" data-r="3"><span data-rl="3">Taruh HP di luar kamar</span><button class="ghost ubah" data-rubah="3" aria-label="Ubah ritual malam 1">Ubah</button></label>
+    <label class="meal"><input type="checkbox" data-r="4"><span data-rl="4">Tulis jurnal 1 menit</span><button class="ghost ubah" data-rubah="4" aria-label="Ubah ritual malam 2">Ubah</button></label>
+    <label class="meal"><input type="checkbox" data-r="5"><span data-rl="5">Tidur sebelum larut</span><button class="ghost ubah" data-rubah="5" aria-label="Ubah ritual malam 3">Ubah</button></label>
   </div>
-  <div class="sec">
+  <div class="sec opsional">
     <h2>Ide kilat</h2>
     <p class="mut">Ada ide lewat? Tulis 1 baris, biar nggak hilang.</p>
     <label class="f" for="ide">Ide barusan apa</label>
     <div class="row" style="margin-top:8px"><input type="text" id="ide" maxlength="140" placeholder="Contoh: masak nasi habis solat" autocomplete="off" style="flex:1;min-width:0"><button class="btn" id="ideSave">Catat</button></div>
     <ul class="wk" id="ideList"></ul>
   </div>
-  <div class="sec">
+  <div class="sec opsional">
     <h2>Niat</h2>
     <p class="mut">Niat mau apa, kapan bunyinya. Misal: masak nasi habis solat.</p>
     <label class="f" for="niatApa">Mau apa</label>
@@ -317,6 +320,12 @@ nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
     <label class="f" for="sw">Target air putih per hari (gelas)</label><input type="number" id="sw" min="1" max="20">
     <p class="row" style="margin:14px 0 6px"><button class="btn" id="sSave">Simpan pengaturan</button><button class="ghost" id="notif">Nyalakan pengingat</button></p>
     <p class="mut" id="nState" style="margin:0"></p>
+    <div class="row" style="margin-top:18px;border-top:1px solid var(--line);padding-top:16px">
+      <button class="ghost" id="ekspor">Ekspor data</button>
+      <button class="ghost" id="imporBtn">Impor data</button>
+      <input type="file" id="imporFile" accept="application/json,.json" hidden>
+    </div>
+    <p class="mut" style="margin:8px 0 0">Cadangan JSON. Simpan berkasnya; kalau cache HP terhapus atau ganti HP, impor lagi di sini.</p>
   </div>
 </section>
 
@@ -346,12 +355,14 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const K='sepersen:v2', esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let S; try{S=JSON.parse(localStorage.getItem(K))}catch{}
 S=S||{}; S.days=S.days||{}; S.ide=S.ide||[]; S.niat=S.niat||[];
-S.set=Object.assign({t:['07:00','12:00','19:00'],w:8,n:false,h:false,seen:false},S.set);
+const RIT=['Bangun tanpa scroll','Minum air putih','Rapikan kasur','Taruh HP di luar kamar','Tulis jurnal 1 menit','Tidur sebelum larut'];
+S.set=Object.assign({t:['07:00','12:00','19:00'],w:8,n:false,h:false,seen:false,rit:RIT.slice()},S.set);
+if(!Array.isArray(S.set.rit)||S.set.rit.length!==6)S.set.rit=RIT.slice();
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch{}};
 const dk=d=>new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const T=dk(new Date()), blank=()=>({win:'',mood:'',m:[0,0,0],w:0,j:null,r:[0,0,0,0,0,0],calm:0,fokus:0,rem:0});
 const D=(k=T)=>S.days[k]=Object.assign(blank(),S.days[k]);
-const done=d=>[!!d.win,...d.m.map(Boolean),d.w>=S.set.w,...d.r.map(Boolean)];
+const done=d=>[!!d.win,...d.m.map(Boolean),d.w>=S.set.w,...d.r.map((x,i)=>!!x&&!!(S.set.rit[i]||''))];
 const N=11, buzz=p=>{if(S.set.h&&navigator.vibrate)navigator.vibrate(p)};
 let tt; const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2400)};
 const flash=id=>{const e=$(id);e.hidden=false;setTimeout(()=>e.hidden=true,2600)};
@@ -372,6 +383,11 @@ function home(){
   tween($('#cnt'),n); $('#orb').style.setProperty('--p',n/N);
   ideList(); niatList();
   $('#win').value=d.win;
+  S.set.rit.forEach((v,i)=>{const el=document.querySelector(`[data-rl="${i}"]`);if(!el)return;el.textContent=v||'Kosong, ketuk Ubah';const row=el.closest('.meal'),cb=row&&row.querySelector('input');if(cb){cb.disabled=!v;if(!v)cb.checked=false}el.style.opacity=v?'':'0.55'});
+  const heavy=/lelah|berat/i.test(d.mood||'');
+  document.body.classList.toggle('heavy',heavy);
+  const hn=$('#heavyNote'),lama=winLama();
+  if(heavy){hn.hidden=false;hn.textContent='Hari berat? Cukup win, makan, dan air. Ritual dan niat menunggu.'+(lama?' Kamu pernah: '+lama:'');}else hn.hidden=true;
   $$('#moods .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.m===d.mood));
   $$('[data-meal]').forEach(c=>c.checked=!!d.m[c.dataset.meal]);
   $$('[data-r]').forEach(c=>c.checked=!!d.r[c.dataset.r]);
@@ -381,6 +397,8 @@ function home(){
   if(gl.children.length!==gn)gl.innerHTML=[...Array(gn)].map((_,i)=>`<button class="g" data-g="${i}" style="--k:${i}" aria-label="Gelas ${i+1}"><i></i></button>`).join('');
   [...gl.children].forEach((b,i)=>{b.classList.toggle('on',i<d.w);b.setAttribute('aria-pressed',i<d.w)});
 }
+function winLama(){const ks=Object.keys(S.days).filter(k=>k!==T&&S.days[k]&&S.days[k].win).sort().reverse();return ks.length?S.days[ks[0]].win:''}
+$$('[data-rubah]').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();const i=+b.dataset.rubah,baru=prompt('Nama ritual ini (kosongkan untuk mematikan):',S.set.rit[i]||'');if(baru===null)return;S.set.rit[i]=baru.trim();save();home();toast(baru.trim()?'Ritual diubah.':'Ritual dimatikan.')});
 $('#winSave').onclick=()=>{const v=$('#win').value.trim();if(!v)return toast('Tulis dulu satu hal kecilnya.');D().win=v;save();home();flash('#winOk');toast('Win tersimpan.')};
 $('#moods').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const d=D();d.mood=d.mood===b.dataset.m?'':b.dataset.m;save();home()};
 $$('[data-meal]').forEach(c=>c.onchange=()=>{D().m[c.dataset.meal]=c.checked?1:0;save();home()});
@@ -389,9 +407,12 @@ $('#glasses').onclick=e=>{const b=e.target.closest('.g');if(!b)return;const d=D(
 $$('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;go(g==='fokus'?'bengong':g);if(g==='fokus')setMode('fokus')});
 
 /* Ide kilat + Niat */
-function ideList(){ $('#ideList').innerHTML=S.ide.length?[...S.ide].reverse().map((x,i)=>{const k=S.ide.length-1-i;return `<li><time>${fmt(x.k)}</time><span class="w">${esc(x.t)}</span><span class="row"><button class="ghost" data-ideok="${k}" style="min-height:44px;padding:8px 14px">Beres</button><button class="ghost" data-iderm="${k}" style="min-height:44px;padding:8px 14px" aria-label="Hapus ide">Hapus</button></span></li>`}).join(''):'<li><span class="mut">Belum ada ide. Tulis yang barusan lewat.</span></li>' }
+function ideList(){ $('#ideList').innerHTML=S.ide.length?[...S.ide].reverse().map((x,i)=>{const k=S.ide.length-1-i;return `<li><time>${fmt(x.k)}</time><span class="w">${esc(x.t)}</span><span class="row"><button class="ghost" data-ideok="${k}" style="min-height:44px;padding:8px 14px">Beres</button><button class="ghost" data-ideniat="${k}" style="min-height:44px;padding:8px 14px">Jadi niat</button><button class="ghost" data-iderm="${k}" style="min-height:44px;padding:8px 14px" aria-label="Hapus ide">Hapus</button></span></li>`}).join(''):'<li><span class="mut">Belum ada ide. Tulis yang barusan lewat.</span></li>' }
 $('#ideSave').onclick=()=>{const v=$('#ide').value.trim();if(!v)return toast('Tulis dulu idenya satu baris.');S.ide.push({t:v,k:T});if(S.ide.length>50)S.ide=S.ide.slice(-50);save();$('#ide').value='';ideList();toast('Ide tersimpan.')};
-$('#ideList').onclick=e=>{const ok=e.target.closest('[data-ideok]'),rm=e.target.closest('[data-iderm]');if(ok){const x=S.ide[+ok.dataset.ideok];if(x){const d=D();if(!d.win)d.win=x.t;S.ide.splice(+ok.dataset.ideok,1);save();home();toast('Pindah jadi win hari ini.')}}if(rm){S.ide.splice(+rm.dataset.iderm,1);save();home()}};
+$('#ideList').onclick=e=>{const ok=e.target.closest('[data-ideok]'),rm=e.target.closest('[data-iderm]'),ni=e.target.closest('[data-ideniat]');
+if(ok){const x=S.ide[+ok.dataset.ideok];if(x){const d=D();if(!d.win)d.win=x.t;S.ide.splice(+ok.dataset.ideok,1);save();home();toast('Pindah jadi win hari ini.')}}
+if(ni){const x=S.ide[+ni.dataset.ideniat];if(x){$('#niatApa').value=x.t;$('#niatJam').focus();$('#niatApa').scrollIntoView({block:'center',behavior:RM?'auto':'smooth'});toast('Isi jamnya, lalu Pasang pengingat.')}}
+if(rm){S.ide.splice(+rm.dataset.iderm,1);save();home()}};
 
 let niatUlang=false;
 $('#niatUlang').onclick=e=>{niatUlang=!niatUlang;e.currentTarget.textContent=niatUlang?'Tiap hari':'Sekali saja';e.currentTarget.setAttribute('aria-pressed',niatUlang)};
@@ -437,6 +458,23 @@ function nstate(){const p='Notification' in window?Notification.permission:'none
 async function reqNotif(){if(!('Notification' in window))return nstate();const p=await Notification.requestPermission();S.set.n=p==='granted';save();nstate()}
 $('#notif').onclick=reqNotif; $('#wNotif').onclick=reqNotif;
 $('#sSave').onclick=()=>{S.set.t=[0,1,2].map(i=>$('#s'+i).value||S.set.t[i]);S.set.w=Math.min(20,Math.max(1,+$('#sw').value||8));save();toast('Pengaturan tersimpan.')};
+
+/* Cadangan: ekspor / impor JSON */
+function cadangan(){return JSON.stringify(S,null,2)}
+function simpanTeks(nama,teks,mime){
+  try{if(window.UnduhAndroid&&window.UnduhAndroid.simpan){window.UnduhAndroid.simpan(nama,btoa(unescape(encodeURIComponent(teks))),mime);toast('Cadangan disimpan ke Unduhan.');return true}}catch{}
+  try{const b=new Blob([teks],{type:mime}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=nama;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Cadangan terunduh.');return true}catch{return false}
+}
+$('#ekspor').onclick=()=>{if(!simpanTeks('sepersen-'+T+'.json',cadangan(),'application/json'))toast('Gagal membuat cadangan.')};
+$('#imporBtn').onclick=()=>$('#imporFile').click();
+$('#imporFile').onchange=()=>{const f=$('#imporFile').files[0];if(!f)return;const r=new FileReader();
+r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||typeof o!=='object'||!o.days)throw 0;
+S=Object.assign({days:{},ide:[],niat:[]},o);
+S.set=Object.assign({t:['07:00','12:00','19:00'],w:8,n:false,h:false,seen:true,rit:RIT.slice()},S.set);
+if(!Array.isArray(S.set.rit)||S.set.rit.length!==6)S.set.rit=RIT.slice();
+save();home();setMode(mode);ringkas();toast('Data dipulihkan dari cadangan.')}catch{toast('Berkas cadangan tidak dikenali.')}
+$('#imporFile').value=''};
+r.readAsText(f)};
 const fired={}; setInterval(()=>{const n=new Date(),hm=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');S.set.t.forEach((t,i)=>{if(t!==hm||fired[T+i])return;fired[T+i]=1;const m=['sarapan','makan siang','makan malam'][i];toast('Waktunya '+m+'.');if(S.set.n&&Notification.permission==='granted')new Notification('Sepersen',{body:'Waktunya '+m+'.'})})},20000);
 
 /* Sambutan */
