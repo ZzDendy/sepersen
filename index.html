@@ -391,7 +391,7 @@ $$('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;go(g==='fokus'?'b
 /* Ide kilat + Niat */
 function ideList(){ $('#ideList').innerHTML=S.ide.length?[...S.ide].reverse().map((x,i)=>{const k=S.ide.length-1-i;return `<li><time>${fmt(x.k)}</time><span class="w">${esc(x.t)}</span><span class="row"><button class="ghost" data-ideok="${k}" style="min-height:44px;padding:8px 14px">Beres</button><button class="ghost" data-iderm="${k}" style="min-height:44px;padding:8px 14px" aria-label="Hapus ide">Hapus</button></span></li>`}).join(''):'<li><span class="mut">Belum ada ide. Tulis yang barusan lewat.</span></li>' }
 $('#ideSave').onclick=()=>{const v=$('#ide').value.trim();if(!v)return toast('Tulis dulu idenya satu baris.');S.ide.push({t:v,k:T});if(S.ide.length>50)S.ide=S.ide.slice(-50);save();$('#ide').value='';ideList();toast('Ide tersimpan.')};
-$('#ideList').onclick=e=>{const ok=e.target.closest('[data-ideok]'),rm=e.target.closest('[data-iderm]');if(ok){const x=S.ide[+ok.dataset.ideok];if(x){const d=D();if(!d.win)d.win=x.t;save();toast('Pindah jadi win hari ini.')}}if(rm){S.ide.splice(+rm.dataset.iderm,1);save();ideList()}};
+$('#ideList').onclick=e=>{const ok=e.target.closest('[data-ideok]'),rm=e.target.closest('[data-iderm]');if(ok){const x=S.ide[+ok.dataset.ideok];if(x){const d=D();if(!d.win)d.win=x.t;S.ide.splice(+ok.dataset.ideok,1);save();home();toast('Pindah jadi win hari ini.')}}if(rm){S.ide.splice(+rm.dataset.iderm,1);save();home()}};
 
 let niatUlang=false;
 $('#niatUlang').onclick=e=>{niatUlang=!niatUlang;e.currentTarget.textContent=niatUlang?'Tiap hari':'Sekali saja';e.currentTarget.setAttribute('aria-pressed',niatUlang)};
