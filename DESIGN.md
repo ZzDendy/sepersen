@@ -41,6 +41,11 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 16px. Bottom nav 5 tujua
 - Angka air: memantul lembut (scale 1.25 ke 1 dalam 220ms) tiap tambah. Alasan: momen minum terasa dirayakan.
 - Semua mati total saat prefers-reduced-motion. Timer tetap ganti teks tanpa gerak.
 
+## Fokus hangat tanpa kotak biru
+- Tap highlight transparan di semua benda. Alasan: kilau abu biru bawaan Chrome hilang total.
+- Outline hanya muncul saat keyboard (focus-visible), 3px copper. Alasan: klik mouse dan sentuh bersih, keyboard tetap tahu posisi, kontras 7.09:1 lolos.
+- Layar gelap pakai outline krem 16.86:1. Judul programmatic tanpa outline. Tidak ada outline none tanpa ganti.
+
 ## Layar MVP
 1. Hari Ini: sapa, win 1% cepat, mood 10 detik, checklist makan dan air, ritual pagi dan malam, jalan pintas.
 2. Jurnal: 3 prompt kecil, riwayat, status kosong jujur.
