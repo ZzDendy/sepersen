@@ -57,6 +57,14 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 16px. Bottom nav 5 tujua
 - Jadwal makan (pagi, siang, malam) didaftarkan ulang tiap simpan pengaturan dan tiap buka aplikasi. Alarm inexact harian dijadwal ulang tiap berbunyi dan tiap HP dinyalakan. Alasan: cukup tepat tanpa izin exact alarm, tetap jalan setelah reboot.
 - Di browser biasa jembatan tidak ada dan alur web standar dipakai (toast + Web Notification). Pesan "tidak didukung" diganti "kabar di aplikasi" agar tidak menakuti.
 
+## Premium 2 (tanpa tambah fitur)
+- Monogram berbingkai emas tipis + kilau atas. Alasan: satu tanda pemilik yang terasa mahal tanpa gambar baru.
+- Kartu hero berlapis (highlight atas + bayangan dua tingkat). Kartu flat di atas #FFFEFB. Alasan: hierarki terbaca sekali lihat.
+- Tombol utama berkilau tekan + bayangan menekan. Alasan: umpan balik jempol yang terasa mahal.
+- Timer Bengong memakai cincin progres krem mengelilingi halo. Alasan: sisa waktu terbaca tanpa angka saja.
+- Nav aktif memakai titik kecil di bawah label. Alasan: status terbaca tanpa warna saja.
+- Toast berkabar pine di kiri. Alasan: kabar sukses punya tanda selain warna.
+
 ## Layar MVP
 1. Hari Ini: sapa, win 1% cepat, mood 10 detik, checklist makan dan air, ritual pagi dan malam, jalan pintas.
 2. Jurnal: 3 prompt kecil, riwayat, status kosong jujur.

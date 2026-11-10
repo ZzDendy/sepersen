@@ -301,7 +301,15 @@
   }));
   document.querySelectorAll('[data-go="fokus"]').forEach((b) => b.addEventListener("click", () => setMode("fokus", true)));
 
-  function draw() { show.textContent = fmt(left); }
+  function draw() {
+    show.textContent = fmt(left);
+    const ring = $("#tRing");
+    if (ring) {
+      const C = 2 * Math.PI * 54;
+      ring.style.strokeDasharray = String(C);
+      ring.style.strokeDashoffset = String(C * (TOTAL ? left / TOTAL : 0));
+    }
+  }
   function stopTick() {
     clearInterval(tick); tick = null;
     if (dark) dark.classList.remove("run");
