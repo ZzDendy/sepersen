@@ -24,8 +24,14 @@
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+  function getar(ms) {
+    const j = jembatan();
+    if (j && j.getar) { try { j.getar(ms); return true; } catch {} }
+    try { if (ms && navigator.vibrate) { navigator.vibrate(ms); return true; } } catch {}
+    return false;
+  }
   function buzz(ms) {
-    try { if (ms && navigator.vibrate) navigator.vibrate(ms); } catch {}
+    getar(ms);
   }
 
   let toastT;
@@ -151,11 +157,6 @@
       ? "Minggu ini kamu catat " + bits.join(", ") + (moodTop ? ", mood tersering " + (label[moodTop[0]] || moodTop[0]) + "." : ".") + " Pelan pelan saja."
       : "Belum ada catatan minggu ini. Mulai dari win kecil hari ini.";
   }
-
-  const hour = new Date().getHours();
-  const part = hour < 11 ? "pagi" : hour < 15 ? "siang" : hour < 19 ? "sore" : "malam";
-  $("#greet").textContent = "Selamat " + part + ", " +
-    new Date().toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long" }) + ".";
 
   const day = store.read("sepersen-day-" + today, {});
 
@@ -345,25 +346,72 @@
   $("#sMalam").value = settings.malam; $("#sWater").value = settings.water;
   $("#sSave").addEventListener("click", () => {
     Object.assign(settings, { pagi: $("#sPagi").value, siang: $("#sSiang").value, malam: $("#sMalam").value, water: Number($("#sWater").value) || 8 });
-    if (store.write("sepersen-settings", settings)) { paintWater(false); toast("Pengaturan tersimpan."); }
+    if (store.write("sepersen-settings", settings)) { paintWater(false); daftarkanJadwalOs(); toast("Pengaturan tersimpan."); }
     else toast("Penyimpanan diblokir.");
   });
+  daftarkanJadwalOs();
+
+  function jembatan() {
+    try { return window.NotifikasiAndroid || null; } catch { return null; }
+  }
+  function jadwalOs() {
+    try { return window.JadwalMakan || null; } catch { return null; }
+  }
+  function daftarkanJadwalOs() {
+    const j = jadwalOs();
+    if (!j || !j.simpan) return;
+    try { j.simpan(settings.pagi, settings.siang, settings.malam); } catch {}
+  }
+  function webNotifAda() {
+    try { return "Notification" in window; } catch { return false; }
+  }
+  function kabar(judul, isi) {
+    const j = jembatan();
+    if (j && j.kabar) { try { j.kabar(judul, isi); return; } catch {} }
+    toast(isi);
+    if (webNotifAda()) {
+      try {
+        if (Notification.permission === "granted" && document.hidden) new Notification(judul, { body: isi });
+      } catch {}
+    }
+  }
+  function getar(ms) {
+    const j = jembatan();
+    if (j && j.getar) { try { j.getar(ms); return true; } catch {} }
+    try { if (ms && navigator.vibrate) { navigator.vibrate(ms); return true; } } catch {}
+    return false;
+  }
 
   const nState = $("#notifState");
   function paintNotif() {
-    nState.textContent = Notification.permission === "granted"
-      ? "Pengingat nyala. Bunyi saat Sepersen terbuka di HP."
-      : "Pengingat mati. Nyalakan agar HP mengingatkan di jam makan.";
+    const j = jembatan();
+    if (j) {
+      let izin = "";
+      try { izin = j.izinNotifikasi(); } catch {}
+      nState.textContent = izin === "granted"
+        ? "Pengingat nyala. HP mengingatkan di jam makan."
+        : "Pengingat mati. Nyalakan agar HP mengingatkan di jam makan.";
+      return;
+    }
+    if (webNotifAda()) {
+      nState.textContent = Notification.permission === "granted"
+        ? "Pengingat nyala. HP mengingatkan di jam makan saat Sepersen terbuka."
+        : "Pengingat mati. Nyalakan agar Sepersen mengingatkan di jam makan.";
+    } else {
+      nState.textContent = "Pengingat lewat kabar di aplikasi.";
+    }
   }
-  if ("Notification" in window) paintNotif();
-  else nState.textContent = "Browser ini tidak mendukung pengingat.";
+  paintNotif();
   $("#notif").addEventListener("click", async () => {
-    if (!("Notification" in window)) return;
+    const j = jembatan();
+    if (j && j.mintaIzin) { try { j.mintaIzin(); } catch {} paintNotif(); return; }
+    if (!webNotifAda()) return;
     await Notification.requestPermission();
     paintNotif();
   });
 
-  // Pengingat hanya bunyi saat aplikasi terbuka, jadi cek tiap 30 detik.
+  // Pengingat jalan dua jalur: jembatan asli (jadwal OS, bunyi walau app
+  // ditutup) atau cek tiap 30 detik saat aplikasi terbuka.
   const said = store.read("sepersen-said-" + today, {});
   function check() {    const now = new Date();
     const hm = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
@@ -372,36 +420,28 @@
       if (hm === at && !said[k]) {
         said[k] = true;
         store.write("sepersen-said-" + today, said);
-        toast(text);
-        if (Notification.permission === "granted" && document.hidden) new Notification("Sepersen", { body: text });
+        kabar("Sepersen", text);
       }
     });
   }
   setInterval(check, 30000);
   check();
 
-  let deferredPrompt = null;
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    const st = $("#wInstallSt");
-    if (st) st.textContent = "Status: siap dipasang";
-  });
-
   function paintWelcome() {
+    const j = jembatan();
     const nSt = $("#wNotifSt");
     if (nSt) {
-      if (!("Notification" in window)) nSt.textContent = "Status: browser tidak dukung";
+      if (j) {
+        let izin = "";
+        try { izin = j.izinNotifikasi(); } catch {}
+        nSt.textContent = izin === "granted" ? "Status: nyala" : "Status: mati";
+      } else if (!webNotifAda()) nSt.textContent = "Status: kabar di aplikasi";
       else if (Notification.permission === "granted") nSt.textContent = "Status: nyala";
       else if (Notification.permission === "denied") nSt.textContent = "Status: ditolak, bisa via Ingat";
       else nSt.textContent = "Status: mati";
     }
     const bSt = $("#wBuzzSt");
     if (bSt && !bSt.dataset.done) bSt.textContent = "Status: belum dicoba";
-    const iSt = $("#wInstallSt");
-    if (iSt && !deferredPrompt) {
-      if (window.matchMedia("(display-mode: standalone)").matches) iSt.textContent = "Status: terpasang";
-    }
   }
   const seen = store.read("sepersen-seen", false);
   const welcome = $("#welcome");
@@ -418,7 +458,9 @@
     }
   }
   async function askNotif() {
-    if (!("Notification" in window)) return;
+    const j = jembatan();
+    if (j && j.mintaIzin) { try { j.mintaIzin(); } catch {} paintNotif(); paintWelcome(); return; }
+    if (!webNotifAda()) return;
     await Notification.requestPermission();
     paintNotif();
     paintWelcome();
@@ -427,26 +469,14 @@
   if (wNotif) wNotif.addEventListener("click", askNotif);
   const wBuzz = $("#wBuzz");
   if (wBuzz) wBuzz.addEventListener("click", () => {
-    buzz(20);
+    const ok = getar(20);
     const bSt = $("#wBuzzSt");
     if (bSt) {
       bSt.dataset.done = "1";
-      let ok = false;
-      try { ok = "vibrate" in navigator; } catch {}
-      bSt.textContent = ok ? "Status: bergetar" : "Status: HP tidak dukung, tetap jalan";
+      let dukung = ok;
+      try { dukung = dukung || "vibrate" in navigator; } catch {}
+      bSt.textContent = dukung ? "Status: bergetar" : "Status: HP ini tidak bergetar";
     }
-  });
-  const wInstall = $("#wInstall");
-  if (wInstall) wInstall.addEventListener("click", async () => {
-    const iSt = $("#wInstallSt");
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice.catch(() => {});
-      deferredPrompt = null;
-      if (iSt) iSt.textContent = "Status: diproses";
-      return;
-    }
-    toast("Menu browser, Add to Home screen.");
   });
   function closeWelcome() {
     store.write("sepersen-seen", true);

@@ -29,7 +29,7 @@ Sepersen, teman harian 1% lebih baik. Nada: lembut, memaafkan, tanpa streak yang
 - Tanpa gradien warna mencolok, tanpa grid, tanpa stripe kiri, tanpa badge di atas judul, tanpa ilustrasi generik.
 
 ## Layout
-Mobile only, satu kolom, lebar maks 480px, padding sisi 16px. Bottom nav 5 tujuan: Hari Ini, Jurnal, Bengong, Ingat, Ringkas, bentuk pil solid mengambang dengan ikon SVG 22px konsisten (gores 1.8, ujung bulat). Target sentuh min 48px Android. Layar Bengong: tinta pekat dengan teks krem, tanpa yang bisa diklik selain jeda dan selesai.
+Mobile only, satu kolom, lebar maks 480px, padding sisi 16px. Bottom nav 5 tujuan: Hari Ini, Jurnal, Bengong, Ingat, Ringkas, bentuk pil solid mengambang dengan ikon SVG 22px konsisten (gores 1.8, ujung bulat). Target sentuh min 48px Android. Layar Bengong: tinta pekat dengan teks krem, tanpa yang bisa diklik selain jeda dan selesai. Header Beranda: judul saja, tanpa kicker dan sub penjelas.
 
 ## Motion (MOTION 2, semua pakai transform dan opacity)
 - Buka layar: kartu muncul bertahap 60ms per kartu, naik 10px + fade 280ms ease-out. Alasan: menuntun mata dari atas ke bawah tanpa kejutan.
@@ -47,11 +47,15 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 16px. Bottom nav 5 tujua
 - Layar gelap pakai outline krem 16.86:1. Judul programmatic tanpa outline. Tidak ada outline none tanpa ganti.
 
 ## Layar sambutan izin awal
-- Satu layar scroll saat buka pertama: 3 kartu izin opsional, boleh lewati semua. Alasan: izin diminta sekali di depan dengan bahasa lembut, bukan muncul tiba tiba.
-- Izin 1 notifikasi pengingat makan. Alasan: bunyi saat Sepersen terbuka di jam makan, tanpa lokasi dan tanpa data keluar HP.
-- Izin 2 getar momen penting. Alasan: target air, jurnal, dan timer selesai terasa dirayakan. Tanpa getar pun aplikasi jalan penuh.
-- Izin 3 pasang ke layar utama. Alasan: tanpa ini Sepersen cuma tab browser biasa, install bikin offline dan dibuka sekali ketuk.
-- Tiap kartu ada status teks (Mati, Nyala, Terpasang), bukan warna saja. Tidak ada izin lokasi, kamera, kontak, atau file.
+- Satu layar scroll saat buka pertama: 2 kartu izin opsional, boleh lewati semua. Alasan: izin diminta sekali di depan dengan bahasa lembut, bukan muncul tiba tiba.
+- Izin 1 notifikasi pengingat makan. Alasan: di APK bunyi walau aplikasi ditutup lewat alarm OS; di browser bunyi saat Sepersen terbuka. Tanpa lokasi dan tanpa data keluar HP.
+- Izin 2 getar momen penting. Alasan: target air, jurnal, dan timer selesai terasa dirayakan. Tanpa getar pun aplikasi jalan penuh; status jujur bila HP tidak bergetar.
+- Tiap kartu ada status teks (Mati, Nyala), bukan warna saja. Tidak ada izin lokasi, kamera, kontak, atau file. Kartu pasang ke layar utama dibuang karena distribusi sekarang APK.
+
+## Pengingat asli (khusus APK)
+- WebView tidak punya Web Notification API, jadi pengingat lewat jembatan asli `NotifikasiAndroid`: tampilkan kabar, minta izin, getar, dan jadwal harian. Alasan: pengingat bunyi walau aplikasi ditutup, tanpa Firebase dan tanpa server.
+- Jadwal makan (pagi, siang, malam) didaftarkan ulang tiap simpan pengaturan dan tiap buka aplikasi. Alarm inexact harian dijadwal ulang tiap berbunyi dan tiap HP dinyalakan. Alasan: cukup tepat tanpa izin exact alarm, tetap jalan setelah reboot.
+- Di browser biasa jembatan tidak ada dan alur web standar dipakai (toast + Web Notification). Pesan "tidak didukung" diganti "kabar di aplikasi" agar tidak menakuti.
 
 ## Layar MVP
 1. Hari Ini: sapa, win 1% cepat, mood 10 detik, checklist makan dan air, ritual pagi dan malam, jalan pintas.
