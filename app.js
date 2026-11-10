@@ -272,9 +272,9 @@
 
   // endAt dipakai agar timer tetap akurat saat layar sleep.
   const MODES = {
-    bengong: { secs: 600, title: "Bengong 10 menit", sub: "Duduk diam, tatap tembok, tidak perlu melakukan apa pun. Timer jalan sendiri.", key: "bengong", done: "Selesai. Pelan pelan ambil HP." },
-    fokus: { secs: 900, title: "Fokus 15 menit", sub: "Satu hal saja. HP diam, kerjakan sampai timer bunyi.", key: "fokus", done: "Fokus selesai. Istirahat sebentar." },
-    rem: { secs: 600, title: "Rem scroll 10 menit", sub: "Niatkan buka HP 10 menit. Saat timer bunyi, berhenti dan taruh HP.", key: "rem", done: "Waktu habis. Berhenti scroll, pelan pelan taruh HP." }
+    bengong: { secs: 600, title: "Bengong 10 menit", key: "bengong", done: "Selesai. Pelan pelan ambil HP." },
+    fokus: { secs: 900, title: "Fokus 15 menit", key: "fokus", done: "Fokus selesai. Istirahat sebentar." },
+    rem: { secs: 600, title: "Rem scroll 10 menit", key: "rem", done: "Waktu habis. Berhenti scroll, pelan pelan taruh HP." }
   };
   let mode = "bengong";
   let TOTAL = MODES.bengong.secs;
@@ -289,8 +289,6 @@
     $$("#tSeg button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.t === mode)));
     const title = $("#tTitle");
     if (title) title.textContent = MODES[mode].title;
-    const sub = $("#tSub");
-    if (sub) sub.textContent = MODES[mode].sub;
     draw();
   }
   $$("#tSeg button").forEach((b) => b.addEventListener("click", () => {

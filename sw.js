@@ -1,5 +1,5 @@
 // shortcut: cache statis saja, tanpa sync background. Naik kelas saat butuh pengingat saat aplikasi tertutup (butuh Workbox atau FCM).
-const CACHE = "sepersen-v11";
+const CACHE = "sepersen-v12";
 const FILES = ["./", "./index.html", "./app.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (e) => {

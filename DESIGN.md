@@ -29,7 +29,7 @@ Sepersen, teman harian 1% lebih baik. Nada: lembut, memaafkan, tanpa streak yang
 - Tanpa gradien warna mencolok, tanpa grid, tanpa stripe kiri, tanpa badge di atas judul, tanpa ilustrasi generik.
 
 ## Layout
-Mobile only, satu kolom, lebar maks 480px, padding sisi 16px. Bottom nav 5 tujuan: Hari Ini, Jurnal, Bengong, Ingat, Ringkas, bentuk pil solid mengambang dengan ikon SVG 22px konsisten (gores 1.8, ujung bulat). Target sentuh min 48px Android. Layar Bengong: tinta pekat dengan teks krem, tanpa yang bisa diklik selain jeda dan selesai. Header Beranda: judul saja, tanpa kicker dan sub penjelas.
+Mobile only, satu kolom, lebar maks 480px, padding sisi 16px. Bottom nav 5 tujuan: Hari Ini, Jurnal, Bengong, Ingat, Ringkas, bentuk pil solid mengambang dengan ikon SVG 22px konsisten (gores 1.8, ujung bulat). Target sentuh min 48px Android. Layar Bengong: tinta pekat dengan teks krem, tanpa yang bisa diklik selain jeda dan selesai. Header semua layar: judul saja, tanpa kicker dan sub penjelas. Pengecualian: kalimat ringkasan dinamis, status izin, status tersimpan, dan label angka tetap ada karena itu isi, bukan hiasan.
 
 ## Motion (MOTION 2, semua pakai transform dan opacity)
 - Buka layar: kartu muncul bertahap 60ms per kartu, naik 10px + fade 280ms ease-out. Alasan: menuntun mata dari atas ke bawah tanpa kejutan.
