@@ -84,8 +84,7 @@ button:active{transform:scale(.96)}
 .timer svg{position:absolute; inset:0; fill:none; stroke-width:6; stroke-linecap:round; transform:rotate(-90deg)}
 .timer .tr{stroke:rgba(255,255,255,.12)} .timer .pr{stroke:var(--peach); transition:stroke-dashoffset 300ms linear}
 .timer .num{font-size:60px; font-weight:600; font-variant-numeric:tabular-nums}
-.timer.run::before{content:""; position:absolute; inset:14px; border-radius:50%; background:radial-gradient(circle,rgba(255,180,143,.22),transparent 70%); animation:br 4s ease-in-out infinite}
-@keyframes br{50%{transform:scale(1.12); opacity:.6}}
+.timer.run::before{content:""; position:absolute; inset:14px; border-radius:50%; background:radial-gradient(circle,rgba(255,180,143,.22),transparent 70%)}
 .center{justify-content:center; text-align:center}
 
 .hist{border-top:1px solid var(--line); padding:14px 0}
@@ -104,7 +103,7 @@ button:active{transform:scale(.96)}
 
 nav{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(12px + env(safe-area-inset-bottom,0px)); z-index:20;
   width:min(440px,calc(100% - 32px)); display:grid; grid-template-columns:repeat(5,1fr); padding:6px;
-  background:rgba(30,24,56,.72); -webkit-backdrop-filter:blur(20px) saturate(1.4); backdrop-filter:blur(20px) saturate(1.4);
+  background:rgba(30,24,56,.94);
   border:1px solid var(--line); border-radius:999px; box-shadow:0 20px 40px -14px rgba(0,0,0,.6)}
 nav button{flex-direction:column; display:flex; align-items:center; justify-content:center; gap:3px; padding:8px 2px; min-height:58px; font-size:12px; color:var(--mut); border-radius:999px}
 nav svg{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
@@ -132,13 +131,11 @@ nav button[aria-selected=true]{color:#1B1633; background:var(--peach)}
 
 /* ===== Premium layer: kedalaman, gerak, dan detail ===== */
 :root{--out:cubic-bezier(.22,.8,.3,1); --spring:cubic-bezier(.34,1.56,.64,1)}
-html{scroll-behavior:smooth}
-body::before{content:""; position:fixed; inset:-25%; z-index:-1; pointer-events:none;
-  background:radial-gradient(40% 35% at 25% 30%,rgba(150,120,230,.26),transparent 70%),radial-gradient(35% 30% at 78% 22%,rgba(255,180,143,.22),transparent 70%),radial-gradient(38% 32% at 60% 80%,rgba(90,70,170,.28),transparent 70%);
-  animation:drift 30s ease-in-out infinite alternate}
-body::after{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.55; mix-blend-mode:overlay;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
-@keyframes drift{to{transform:translate3d(4%,-3%,0) rotate(6deg) scale(1.08)}}
+nav{contain:layout paint}
+body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:radial-gradient(420px 360px at 85% -60px, rgba(255,180,143,.30), transparent 70%),radial-gradient(380px 380px at -90px 55%, rgba(120,98,200,.28), transparent 70%),linear-gradient(180deg,#15122A 0%,#241B40 100%)}
+body::after{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.35;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
 h1{background:linear-gradient(180deg,#fff 25%,#C9BDF0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent}
 section{animation:none}
 section>*{animation:rise 750ms var(--out) both; animation-delay:calc(var(--i,0)*75ms + 40ms)}
@@ -146,16 +143,12 @@ section>*{animation:rise 750ms var(--out) both; animation-delay:calc(var(--i,0)*
 .wk li:nth-child(1){--i:1}.wk li:nth-child(2){--i:2}.wk li:nth-child(3){--i:3}.wk li:nth-child(4){--i:4}.wk li:nth-child(5){--i:5}.wk li:nth-child(6){--i:6}.wk li:nth-child(7){--i:7}
 .wk li{animation:rise 650ms var(--out) both; animation-delay:calc(var(--i,0)*55ms + 250ms)}
 
-/* Orb hidup */
-.orb::before{animation:breathe 6s ease-in-out infinite}
-@keyframes breathe{50%{transform:scale(1.1)}}
-.orb::after{content:""; position:absolute; inset:-12px; border-radius:50%; pointer-events:none;
-  background:conic-gradient(from 0deg,transparent 0 72%,rgba(255,180,143,.7) 100%);
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),#000 calc(100% - 1.5px)); mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),#000 calc(100% - 1.5px));
-  animation:spin 9s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.orb svg{filter:drop-shadow(0 0 9px rgba(255,180,143,.35))}
-.orb .num{text-shadow:0 0 30px rgba(255,180,143,.35)}
+/* Orb hidup: napas sekali saat muncul, bukan loop */
+.orb::before{animation:breathe 6s ease-in-out 1}
+@keyframes breathe{50%{transform:scale(1.06)}}
+.orb::after{display:none}
+.orb svg{filter:none}
+.orb .num{text-shadow:none}
 
 /* Kartu kaca dengan tepi bergradasi */
 .panel{border:1px solid transparent; transition:transform 400ms var(--out), box-shadow 400ms;
@@ -170,10 +163,8 @@ input[type=text]:focus,input[type=time]:focus,input[type=number]:focus,textarea:
 button{position:relative; overflow:hidden; transition:transform 300ms var(--spring), background 200ms, box-shadow 250ms}
 button:active{transform:scale(.95)}
 .btn{background:linear-gradient(180deg,#FFC6A8,#FFA67C); box-shadow:0 16px 30px -12px rgba(255,160,120,.75), inset 0 1px 0 rgba(255,255,255,.5)}
-.btn::after{content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.5) 50%,transparent 65%); transform:translateX(-130%); animation:sheen 6s ease-in-out 2.5s infinite}
-@keyframes sheen{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
-.rp{position:absolute; border-radius:50%; background:rgba(255,255,255,.3); transform:scale(0); animation:rp 650ms var(--out) forwards; pointer-events:none}
-@keyframes rp{to{transform:scale(1); opacity:0}}
+.btn::after{display:none}
+.rp{display:none}
 .ok{animation:popin 500ms var(--spring)}
 @keyframes popin{from{opacity:0; transform:scale(.8) translateY(4px)}}
 .chip{transition:transform 300ms var(--spring), background 250ms, color 250ms, border-color 250ms}
@@ -196,15 +187,16 @@ nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
 @keyframes bob{from{transform:translateY(5px) scale(.8)}}
 
 /* Timer, toast, sambutan, grafik */
-.timer .pr{filter:drop-shadow(0 0 8px rgba(255,180,143,.65))}
+.timer .pr{stroke:var(--peach)}
 .toast{transition:opacity 300ms, transform 550ms var(--spring), visibility 300ms}
-.welcome{animation:fade 400ms ease-out}
+.welcome{animation:none}
 .sheet{animation:sheetUp 700ms var(--out)}
 @keyframes fade{from{opacity:0}}
 @keyframes sheetUp{from{transform:translateY(100%)}}
-.b i{transform-origin:bottom; transition:none; animation:grow 900ms var(--out) both; animation-delay:calc(var(--k,0)*80ms + 250ms)}
+.b i{transform-origin:bottom; transition:none; animation:grow 600ms var(--out) both; animation-delay:calc(var(--k,0)*50ms + 150ms)}
 @keyframes grow{from{transform:scaleY(0)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}
+@media (max-width:380px){.bars{gap:6px}.timer{width:230px; height:230px}}
 </style>
 </head>
 <body>

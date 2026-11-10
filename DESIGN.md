@@ -59,3 +59,13 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 20px. Bottom nav 5 tujua
 4. Ingat: jam makan, target air, tombol izin notifikasi.
 5. Ringkasan: rekap 7 hari dari data lokal. Hitung win, jurnal, gelas air, ritual, menit bengong dan fokus. Grafik air + daftar win + pips 11 per hari. Tanpa streak, tanpa cloud, tanpa angka palsu.
 - Penyimpanan lokal kunci `sepersen:v2` (skema baru, tidak migrasi otomatis dari skema lama `sepersen-day-*`; data lama tidak terbawa).
+
+## Optimasi HP kentang (tanpa ubah tampilan)
+- Latar tidak lagi bergerak (drift 30 detik dimatikan). Alasan: transform viewport tiap frame bikin scroll patah.
+- Noise tanpa blend overlay + opacity diturunkan. Alasan: mix-blend memaksa repaint tiap frame.
+- Cincin putar orb dimatikan total, napas orb sekali saat muncul. Alasan: 2 loop infinite nonstop paling berat di layar utama.
+- Kilau tombol dimatikan, riak sentuh dimatikan. Alasan: animasi tiap ketuk menumpuk saat scroll cepat.
+- Nav tanpa backdrop-blur (solid 0.94). Alasan: blur tiap frame saat scroll paling mahal di HP.
+- Halo timer statis saat jalan (tanpa loop). Cincin progres tetap jalan karena itu isi. Alasan: loop 4 detik + drop-shadow bikin timer patah.
+- Cincin timer tanpa drop-shadow, orb tanpa glow, angka tanpa text-shadow. Alasan: filter bayangan tiap frame mahal di GPU HP.
+- Grafik 600ms + jeda 50ms, breakpoint 380px. Alasan: tetap hidup tapi selesai cepat.
