@@ -17,6 +17,11 @@
   --disp:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
+html,body{overscroll-behavior:none; scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none; width:0}
+body{-webkit-user-select:none; user-select:none; -webkit-touch-callout:none}
+input,textarea{-webkit-user-select:text; user-select:text}
+button,a,label,.meal,.chip,.g{touch-action:manipulation}
 html{-webkit-text-size-adjust:100%; background:#15122A}
 body{
   margin:0; min-height:100vh; color:var(--ink); font:400 16px/1.55 "Figtree",system-ui,sans-serif;
@@ -207,7 +212,7 @@ nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
     <p class="date">Selamat datang di Sepersen.</p>
     <h1 id="wH">Siapkan 2 hal kecil dulu.</h1>
     <p class="mut">Semua boleh dilewati. Sepersen tetap jalan penuh tanpa satu pun izin ini. Data cuma di HP, tidak dikirim ke mana pun.</p>
-    <div class="perm"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span><div style="flex:1"><h2>Pengingat makan</h2><p>HP mengingatkan di jam makan saat Sepersen terbuka.</p><p class="row"><button class="ghost" id="wNotif">Nyalakan pengingat</button><span class="st" id="wNotifSt">Status: mati</span></p></div></div>
+    <div class="perm"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span><div style="flex:1"><h2>Pengingat makan</h2><p>HP mengingatkan di jam makan. Di APK tetap bunyi walau aplikasi ditutup.</p><p class="row"><button class="ghost" id="wNotif">Nyalakan pengingat</button><span class="st" id="wNotifSt">Status: mati</span></p></div></div>
     <div class="perm"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1.2 4-.8"/><path d="M12 3v8"/></svg></span><div style="flex:1"><h2>Getar momen penting</h2><p>Target air, jurnal, dan timer selesai terasa dirayakan. Coba dulu di sini.</p><p class="row"><button class="ghost" id="wBuzz">Coba getar</button><span class="st" id="wBuzzSt">Status: belum dicoba</span></p></div></div>
     <p class="row" style="margin:14px 0 8px"><button class="btn" id="wStart">Mulai pakai Sepersen</button><button class="ghost" id="wLater">Lewati semua</button></p>
   </div>
@@ -451,13 +456,24 @@ $('#tEnd').onclick=()=>finish(false);
 $('#modes').onclick=e=>{const b=e.target.closest('button');if(b&&b.dataset.mode!==mode)setMode(b.dataset.mode)};
 
 /* Pengingat + izin */
+const OS=window.NotifikasiAndroid||null, JADWAL=window.JadwalMakan||null;
+function kabar(judul,isi){if(OS&&OS.kabar){try{OS.kabar(judul,isi);return}catch{}}if('Notification' in window&&Notification.permission==='granted'){try{new Notification(judul,{body:isi})}catch{}}}
+function daftarJadwal(){if(JADWAL&&JADWAL.simpan){try{JADWAL.simpan(S.set.t[0],S.set.t[1],S.set.t[2])}catch{}}}
 function ingat(){S.set.t.forEach((t,i)=>$('#s'+i).value=t);$('#sw').value=S.set.w;nstate()}
-function nstate(){const p='Notification' in window?Notification.permission:'none', on=S.set.n&&p==='granted';
-  $('#nState').textContent=p==='none'?'Browser ini belum mendukung notifikasi.':p==='denied'?'Notifikasi diblokir. Izinkan lewat pengaturan browser atau aplikasi.':on?'Pengingat menyala. Bunyi saat Sepersen terbuka.':'Pengingat mati. Nyalakan agar HP mengingatkan di jam makan.';
+function nstate(){
+  if(OS){let izin='';try{izin=OS.izinNotifikasi()}catch{}
+    const on=izin==='granted';
+    $('#nState').textContent=on?'Pengingat menyala. HP mengingatkan di jam makan, walau Sepersen ditutup.':'Pengingat mati. Ketuk Nyalakan pengingat, lalu izinkan notifikasi Sepersen di pengaturan HP.';
+    $('#wNotifSt').textContent='Status: '+(on?'menyala':'mati');return}
+  const p='Notification' in window?Notification.permission:'none', on=S.set.n&&p==='granted';
+  $('#nState').textContent=p==='none'?'Pengingat bunyi di aplikasi saat Sepersen terbuka.':'Pengingat '+(p==='denied'?'diblokir. Izinkan lewat pengaturan browser.':on?'menyala. Bunyi saat Sepersen terbuka.':'mati. Nyalakan agar HP mengingatkan di jam makan.');
   $('#wNotifSt').textContent='Status: '+(p==='denied'?'ditolak':on?'menyala':'mati')}
-async function reqNotif(){if(!('Notification' in window))return nstate();const p=await Notification.requestPermission();S.set.n=p==='granted';save();nstate()}
+async function reqNotif(){
+  if(OS){try{OS.mintaIzin()}catch{};S.set.n=true;save();nstate();toast('Izinkan notifikasi Sepersen di pengaturan HP.');return}
+  if(!('Notification' in window))return nstate();
+  const p=await Notification.requestPermission();S.set.n=p==='granted';save();nstate()}
 $('#notif').onclick=reqNotif; $('#wNotif').onclick=reqNotif;
-$('#sSave').onclick=()=>{S.set.t=[0,1,2].map(i=>$('#s'+i).value||S.set.t[i]);S.set.w=Math.min(20,Math.max(1,+$('#sw').value||8));save();toast('Pengaturan tersimpan.')};
+$('#sSave').onclick=()=>{S.set.t=[0,1,2].map(i=>$('#s'+i).value||S.set.t[i]);S.set.w=Math.min(20,Math.max(1,+$('#sw').value||8));save();daftarJadwal();toast('Pengaturan tersimpan.')};
 
 /* Cadangan: ekspor / impor JSON */
 function cadangan(){return JSON.stringify(S,null,2)}
@@ -475,7 +491,8 @@ if(!Array.isArray(S.set.rit)||S.set.rit.length!==6)S.set.rit=RIT.slice();
 save();home();setMode(mode);ringkas();toast('Data dipulihkan dari cadangan.')}catch{toast('Berkas cadangan tidak dikenali.')}
 $('#imporFile').value=''};
 r.readAsText(f)};
-const fired={}; setInterval(()=>{const n=new Date(),hm=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');S.set.t.forEach((t,i)=>{if(t!==hm||fired[T+i])return;fired[T+i]=1;const m=['sarapan','makan siang','makan malam'][i];toast('Waktunya '+m+'.');if(S.set.n&&Notification.permission==='granted')new Notification('Sepersen',{body:'Waktunya '+m+'.'})})},20000);
+const fired={}; setInterval(()=>{const n=new Date(),hm=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');S.set.t.forEach((t,i)=>{if(t!==hm||fired[T+i])return;fired[T+i]=1;const m=['sarapan','makan siang','makan malam'][i];toast('Waktunya '+m+'.');kabar('Sepersen','Waktunya '+m+'.')})},20000);
+daftarJadwal(); setInterval(daftarJadwal,6e5);
 
 /* Sambutan */
 const closeWelcome=()=>{S.set.seen=true;save();$('#welcome').hidden=true};

@@ -49,8 +49,13 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 20px. Bottom nav 5 tujua
 - Tidak ada izin lokasi, kamera, kontak, atau file. Kartu pasang ke layar utama dibuang karena distribusi sekarang APK.
 
 ## Pengingat asli (khusus APK)
-- WebView tidak punya Web Notification API, jadi pengingat lewat jembatan asli `NotifikasiAndroid`: tampilkan kabar, minta izin, getar, dan jadwal harian. Alasan: pengingat bunyi walau aplikasi ditutup, tanpa Firebase dan tanpa server.
-- Jadwal makan (pagi, siang, malam) didaftarkan ulang tiap simpan pengaturan dan tiap buka aplikasi. Alarm inexact harian dijadwal ulang tiap berbunyi dan tiap HP dinyalakan.
+- WebView tidak punya Web Notification API, jadi status dan pengingat memakai jembatan `NotifikasiAndroid` bila ada: kabar, izinNotifikasi, mintaIzin, getar. Di browser biasa jatuh ke Web Notification. Alasan: tanpa ini layar Ingat menulis "browser belum mendukung" padahal APK-nya sanggup.
+- Jadwal makan (pagi, siang, malam) didaftarkan ke `JadwalMakan` tiap simpan pengaturan, tiap buka aplikasi, dan tiap 10 menit. Alarm inexact harian dijadwal ulang tiap berbunyi dan tiap HP dinyalakan. Alasan: pengingat bunyi walau aplikasi ditutup.
+
+## Terasa aplikasi, bukan web
+- Tanpa efek pantul (overscroll-behavior none), tanpa scrollbar, teks UI tidak bisa diseleksi, input tetap bisa.
+- Wrapper: overScrollMode never, scrollbar disembunyikan, sorot fokus default dimatikan, haptic feedback nyala, status bar dan navigation bar #15122A.
+- Alasan: hal hal kecil ini yang membedakan app asli dari halaman web yang dibungkus.
 
 ## Layar
 1. Hari Ini: tanggal, orb 11 hal kecil, win 1%, mood, makan, air gelas, ritual pagi dan malam, jalan pintas.
