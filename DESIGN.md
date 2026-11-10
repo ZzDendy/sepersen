@@ -46,6 +46,13 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 16px. Bottom nav 5 tujua
 - Outline hanya muncul saat keyboard (focus-visible), 3px copper. Alasan: klik mouse dan sentuh bersih, keyboard tetap tahu posisi, kontras 7.09:1 lolos.
 - Layar gelap pakai outline krem 16.86:1. Judul programmatic tanpa outline. Tidak ada outline none tanpa ganti.
 
+## Layar sambutan izin awal
+- Satu layar scroll saat buka pertama: 3 kartu izin opsional, boleh lewati semua. Alasan: izin diminta sekali di depan dengan bahasa lembut, bukan muncul tiba tiba.
+- Izin 1 notifikasi pengingat makan. Alasan: bunyi saat Sepersen terbuka di jam makan, tanpa lokasi dan tanpa data keluar HP.
+- Izin 2 getar momen penting. Alasan: target air, jurnal, dan timer selesai terasa dirayakan. Tanpa getar pun aplikasi jalan penuh.
+- Izin 3 pasang ke layar utama. Alasan: tanpa ini Sepersen cuma tab browser biasa, install bikin offline dan dibuka sekali ketuk.
+- Tiap kartu ada status teks (Mati, Nyala, Terpasang), bukan warna saja. Tidak ada izin lokasi, kamera, kontak, atau file.
+
 ## Layar MVP
 1. Hari Ini: sapa, win 1% cepat, mood 10 detik, checklist makan dan air, ritual pagi dan malam, jalan pintas.
 2. Jurnal: 3 prompt kecil, riwayat, status kosong jujur.

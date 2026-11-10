@@ -365,8 +365,7 @@
 
   // Pengingat hanya bunyi saat aplikasi terbuka, jadi cek tiap 30 detik.
   const said = store.read("sepersen-said-" + today, {});
-  function check() {
-    const now = new Date();
+  function check() {    const now = new Date();
     const hm = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
     const meals = [["pagi", settings.pagi, "Waktunya sarapan. Makan pelan pelan."], ["siang", settings.siang, "Waktunya makan siang."], ["malam", settings.malam, "Waktunya makan malam."] ];
     meals.forEach(([k, at, text]) => {
@@ -380,6 +379,77 @@
   }
   setInterval(check, 30000);
   check();
+
+  let deferredPrompt = null;
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const st = $("#wInstallSt");
+    if (st) st.textContent = "Status: siap dipasang";
+  });
+
+  function paintWelcome() {
+    const nSt = $("#wNotifSt");
+    if (nSt) {
+      if (!("Notification" in window)) nSt.textContent = "Status: browser tidak dukung";
+      else if (Notification.permission === "granted") nSt.textContent = "Status: nyala";
+      else if (Notification.permission === "denied") nSt.textContent = "Status: ditolak, bisa via Ingat";
+      else nSt.textContent = "Status: mati";
+    }
+    const bSt = $("#wBuzzSt");
+    if (bSt && !bSt.dataset.done) bSt.textContent = "Status: belum dicoba";
+    const iSt = $("#wInstallSt");
+    if (iSt && !deferredPrompt) {
+      if (window.matchMedia("(display-mode: standalone)").matches) iSt.textContent = "Status: terpasang";
+    }
+  }
+  const seen = store.read("sepersen-seen", false);
+  const welcome = $("#welcome");
+  if (welcome && !seen) {
+    welcome.hidden = false;
+    paintWelcome();
+    reveal("home");
+  }
+  async function askNotif() {
+    if (!("Notification" in window)) return;
+    await Notification.requestPermission();
+    paintNotif();
+    paintWelcome();
+  }
+  const wNotif = $("#wNotif");
+  if (wNotif) wNotif.addEventListener("click", askNotif);
+  const wBuzz = $("#wBuzz");
+  if (wBuzz) wBuzz.addEventListener("click", () => {
+    buzz(20);
+    const bSt = $("#wBuzzSt");
+    if (bSt) {
+      bSt.dataset.done = "1";
+      let ok = false;
+      try { ok = "vibrate" in navigator; } catch {}
+      bSt.textContent = ok ? "Status: bergetar" : "Status: HP tidak dukung, tetap jalan";
+    }
+  });
+  const wInstall = $("#wInstall");
+  if (wInstall) wInstall.addEventListener("click", async () => {
+    const iSt = $("#wInstallSt");
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice.catch(() => {});
+      deferredPrompt = null;
+      if (iSt) iSt.textContent = "Status: diproses";
+      return;
+    }
+    toast("Menu browser, Add to Home screen.");
+  });
+  function closeWelcome() {
+    store.write("sepersen-seen", true);
+    if (welcome) welcome.hidden = true;
+    go("home");
+  }
+  const wStart = $("#wStart");
+  if (wStart) wStart.addEventListener("click", closeWelcome);
+  const wLater = $("#wLater");
+  if (wLater) wLater.addEventListener("click", closeWelcome);
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
 })();

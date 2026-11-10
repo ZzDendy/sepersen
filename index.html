@@ -155,6 +155,14 @@ nav.tabs button{
 nav.tabs button svg{width:22px; height:22px}
 nav.tabs button[aria-selected=true]{color:#fff; background:var(--copper)}
 [hidden]{display:none !important}
+.welcome{position:fixed; inset:0; z-index:40; background:var(--bg); overflow-y:auto; padding:24px 16px calc(24px + env(safe-area-inset-bottom))}
+.welcome .sheet{max-width:480px; margin:0 auto; padding-bottom:16px}
+.perm{display:flex; gap:12px; align-items:flex-start; background:var(--card); border:1px solid var(--line); border-radius:var(--r-card); padding:16px; margin:0 0 12px}
+.perm .ic{width:44px; height:44px; border-radius:14px; flex:none; background:var(--tint); display:flex; align-items:center; justify-content:center; color:var(--copper)}
+.perm .ic svg{width:22px; height:22px}
+.perm h2{font-size:17px; margin:0 0 4px}
+.perm p{margin:0 0 10px; font-size:14px}
+.perm .st{font-weight:700; color:var(--pine); font-size:14px}
 .saved{display:inline-flex; align-items:center; gap:6px; color:var(--pine); font-weight:700}
 .saved::before{content:""; width:10px; height:10px; border-radius:999px; background:var(--pine)}
 .rv{opacity:0; transform:translateY(10px); transition:opacity 280ms var(--ease), transform 280ms var(--ease); will-change:transform,opacity}
@@ -182,6 +190,44 @@ nav.tabs button:active{transform:scale(.94)}
 </style>
 </head>
 <body>
+<div class="welcome" id="welcome" hidden>
+  <div class="sheet">
+    <div class="hero">
+      <span class="mono" aria-hidden="true">1%</span>
+      <div>
+        <p class="kicker">Selamat datang di Sepersen.</p>
+        <h1>Siapkan 3 hal kecil dulu.</h1>
+      </div>
+    </div>
+    <p class="sub">Semua boleh dilewati. Sepersen tetap jalan penuh tanpa satu pun izin ini. Data cuma di HP, tidak dikirim ke mana pun.</p>
+    <div class="perm">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span>
+      <div style="flex:1">
+        <h2>Pengingat makan</h2>
+        <p>HP mengingatkan di jam makan saat Sepersen terbuka.</p>
+        <p class="row"><button class="btn quiet" id="wNotif">Nyalakan pengingat</button><span class="st" id="wNotifSt">Status: mati</span></p>
+      </div>
+    </div>
+    <div class="perm">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 14c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1.2 4-.8"/><path d="M12 3v8"/></svg></span>
+      <div style="flex:1">
+        <h2>Getar momen penting</h2>
+        <p>Target air, jurnal, dan timer selesai terasa dirayakan. Coba dulu di sini.</p>
+        <p class="row"><button class="btn quiet" id="wBuzz">Coba getar</button><span class="st" id="wBuzzSt">Status: belum dicoba</span></p>
+      </div>
+    </div>
+    <div class="perm">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 20h14"/></svg></span>
+      <div style="flex:1">
+        <h2>Pasang ke layar utama</h2>
+        <p>Menu browser, Add to Home screen. Dibuka sekali ketuk dan jalan offline.</p>
+        <p class="row"><button class="btn quiet" id="wInstall">Cara pasang</button><span class="st" id="wInstallSt">Status: tab browser</span></p>
+      </div>
+    </div>
+    <p class="row"><button class="btn" id="wStart">Mulai pakai Sepersen</button></p>
+    <p><button class="btn ghost" id="wLater">Lewati semua</button></p>
+  </div>
+</div>
 <div class="wrap" id="top">
 
   <section data-screen="home" aria-label="Hari ini">
