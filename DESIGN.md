@@ -60,6 +60,10 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 20px. Bottom nav 5 tujua
 - Service worker didaftarkan dengan network-first, jadi halaman tetap terbuka offline di browser tanpa update tertahan cache lama.
 - Alasan: hal hal kecil ini yang membedakan app asli dari halaman web yang dibungkus.
 
+## Struktur berkas
+- `index.html` markup, `style.css` tampilan, `app.js` perilaku. Dipisah supaya enak dirawat; isi CSS/JS sama persis dengan versi inline sebelumnya.
+- Service worker network-first untuk aset sendiri, cache saat offline. Alasan: update CSS/JS tidak ketahan cache lama.
+
 ## Layar
 1. Hari Ini: tanggal, orb 11 hal kecil, win 1%, mood, makan, air gelas, ritual pagi dan malam, jalan pintas.
 2. Jurnal: 3 prompt, riwayat 10 terakhir, status kosong jujur.
