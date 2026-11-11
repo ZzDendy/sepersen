@@ -1,5 +1,5 @@
-// shortcut: cache statis saja, tanpa sync background. Naik kelas saat butuh pengingat saat aplikasi tertutup (butuh Workbox atau FCM).
-const CACHE = "sepersen-dark-v6";
+// Cache halaman untuk buka offline di browser. Pengingat saat app tertutup ditangani alarm Android, bukan SW.
+const CACHE = "sepersen-dark-v7";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (e) => {
@@ -14,5 +14,16 @@ self.addEventListener("activate", (e) => {
 
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
+  // Navigasi: coba jaringan dulu supaya update langsung terlihat, cache hanya saat offline.
+  if (e.request.mode === "navigate") {
+    e.respondWith(
+      fetch(e.request).then((r) => {
+        const copy = r.clone();
+        e.waitUntil(caches.open(CACHE).then((c) => c.put(e.request, copy)));
+        return r;
+      }).catch(() => caches.match(e.request).then((hit) => hit || caches.match("./")))
+    );
+    return;
+  }
   e.respondWith(caches.match(e.request).then((hit) => hit || fetch(e.request)));
 });

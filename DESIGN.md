@@ -51,10 +51,13 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 20px. Bottom nav 5 tujua
 ## Pengingat asli (khusus APK)
 - WebView tidak punya Web Notification API, jadi status dan pengingat memakai jembatan `NotifikasiAndroid` bila ada: kabar, izinNotifikasi, mintaIzin, getar. Di browser biasa jatuh ke Web Notification. Alasan: tanpa ini layar Ingat menulis "browser belum mendukung" padahal APK-nya sanggup.
 - Jadwal makan (pagi, siang, malam) didaftarkan ke `JadwalMakan` tiap simpan pengaturan, tiap buka aplikasi, dan tiap 10 menit. Alarm inexact harian dijadwal ulang tiap berbunyi dan tiap HP dinyalakan. Alasan: pengingat bunyi walau aplikasi ditutup.
+- Saat jembatan ada, JS hanya menampilkan toast; notifikasi sistem dari alarm OS. Alasan: satu kabar, bukan dua.
 
 ## Terasa aplikasi, bukan web
 - Tanpa efek pantul (overscroll-behavior none), tanpa scrollbar, teks UI tidak bisa diseleksi, input tetap bisa.
-- Wrapper: overScrollMode never, scrollbar disembunyikan, sorot fokus default dimatikan, haptic feedback nyala, status bar dan navigation bar #15122A.
+- Wrapper: overScrollMode never, scrollbar disembunyikan, sorot fokus default dimatikan, haptic feedback nyala, status bar, navigation bar, dan splash Android 12+ #15122A.
+- Layar galat memakai ikon dan nama aplikasi sendiri, tanpa URL dan tanpa tombol buka browser. Alasan: layar gagal pun harus terasa milik aplikasi.
+- Service worker didaftarkan dengan network-first, jadi halaman tetap terbuka offline di browser tanpa update tertahan cache lama.
 - Alasan: hal hal kecil ini yang membedakan app asli dari halaman web yang dibungkus.
 
 ## Layar
@@ -78,7 +81,7 @@ Mobile only, satu kolom, lebar maks 480px, padding sisi 20px. Bottom nav 5 tujua
 ## Ide Kilat + Niat pengingat
 - Ide Kilat: kolom 1 baris + Catat, daftar terbaru di atas. Tiap ide punya Beres (pindah jadi win hari ini lalu ide dihapus), Jadi niat (isi kolom niat + fokus jam), dan Hapus. Maks 50 ide. Alasan: ide lewat tidak hilang, satu ketuk jadi win atau alarm tanpa ketik ulang.
 - Niat: mau apa + jam + Sekali saja/Tiap hari + Pasang pengingat. Daftar tampil jam + ulang + status bunyi + Hapus. Alasan: niat seperti masak nasi habis solat jadi alarm beneran.
-- Sekali saja pakai exact sekali jalan; tiap hari pakai inexact harian + dijadwal ulang tiap berbunyi dan reboot. Alasan: tepat untuk sekali, hemat baterai untuk harian.
+- Sekali saja pakai `setAndAllowWhileIdle` (inexact, tanpa izin exact) dan dihapus setelah bunyi; tiap hari pakai inexact harian + dijadwal ulang tiap berbunyi dan reboot. Alasan: tetap bunyi di Android 13+ tanpa izin khusus, dan tidak dobel setelah reboot.
 - Fix pindah win: sempat tidak tampil karena home() tidak dipanggil; sekarang panggil home() + ide ikut terhapus agar tidak dobel.
 
 ## Milik pemakai: ritual, hari berat, cadangan

@@ -16,7 +16,7 @@
   --line:rgba(255,255,255,.13); --glass:rgba(255,255,255,.06); --edge:rgba(255,255,255,.38);
   --disp:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
 html,body{overscroll-behavior:none; scrollbar-width:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none; width:0}
 body{-webkit-user-select:none; user-select:none; -webkit-touch-callout:none}
@@ -317,7 +317,7 @@ nav button[aria-selected=true] svg{animation:bob 600ms var(--spring)}
 <section id="ingat" hidden>
   <p class="date">Diatur sekali, jalan tiap hari.</p>
   <h1>Pengingat makan dan minum</h1>
-  <p class="mut">Pengingat bunyi saat Sepersen terbuka di HP. Atur jam sesuai kebiasaanmu.</p>
+  <p class="mut">Pengingat bunyi di jam makan. Di APK tetap bunyi walau Sepersen ditutup.</p>
   <div class="panel">
     <label class="f" for="s0">Sarapan pukul</label><input type="time" id="s0">
     <label class="f" for="s1">Makan siang pukul</label><input type="time" id="s1">
@@ -425,7 +425,7 @@ function niatList(){ $('#niatList').innerHTML=S.niat.length?S.niat.map((x,i)=>`<
 function niatDaftar(i){ try{ const j=window.JadwalNiat; if(j&&j.simpan){ const x=S.niat[i]; j.simpan(String(i),x.apa,x.jam,!!x.ulang); return } }catch{} }
 $('#niatSave').onclick=()=>{const apa=$('#niatApa').value.trim(),jam=$('#niatJam').value;if(!apa)return toast('Tulis dulu maunya apa.');if(!jam)return toast('Atur dulu jam berapa.');S.niat.push({apa,jam,ulang:niatUlang,bunyi:false});save();niatDaftar(S.niat.length-1);$('#niatApa').value='';flash('#niatOk');niatList();toast('Pengingat niat terpasang.')};
 $('#niatList').onclick=e=>{const rm=e.target.closest('[data-niatrm]');if(!rm)return;const i=+rm.dataset.niatrm;try{const j=window.JadwalNiat;if(j&&j.hapus)j.hapus(String(i))}catch{}S.niat.splice(i,1);save();niatList()};
-function niatCek(){const n=new Date(),hm=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');let ubah=false;S.niat.forEach((x,i)=>{if(x.jam!==hm||x.bunyi&&!x.ulang)return;if(x.bunyi&&x.ulang&&fired['n'+T+i])return;fired['n'+T+i]=1;toast(x.apa);buzz([60,60,60]);if(window.JadwalNiat&&window.JadwalNiat.kabar){try{window.JadwalNiat.kabar('Sepersen · niat',x.apa)}catch{}}else if(S.set.n&&'Notification' in window&&Notification.permission==='granted'){try{new Notification('Sepersen · niat',{body:x.apa})}catch{}}if(!x.ulang){x.bunyi=true;ubah=true}});if(ubah){save();niatList()}}
+function niatCek(){const n=new Date(),hm=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');let ubah=false;S.niat.forEach((x,i)=>{if(x.jam!==hm||x.bunyi&&!x.ulang)return;if(x.bunyi&&x.ulang&&fired['n'+T+i])return;fired['n'+T+i]=1;toast(x.apa);buzz([60,60,60]);if(!window.JadwalNiat&&S.set.n&&'Notification' in window&&Notification.permission==='granted'){try{new Notification('Sepersen · niat',{body:x.apa})}catch{}}if(!x.ulang){x.bunyi=true;ubah=true}});if(ubah){save();niatList()}}
 setInterval(niatCek,20000);
 
 /* Jurnal */
@@ -457,22 +457,24 @@ $('#modes').onclick=e=>{const b=e.target.closest('button');if(b&&b.dataset.mode!
 
 /* Pengingat + izin */
 const OS=window.NotifikasiAndroid||null, JADWAL=window.JadwalMakan||null;
-function kabar(judul,isi){if(OS&&OS.kabar){try{OS.kabar(judul,isi);return}catch{}}if('Notification' in window&&Notification.permission==='granted'){try{new Notification(judul,{body:isi})}catch{}}}
+/* Di APK alarm OS yang mengirim, jadi jangan dobel. */
+function kabar(judul,isi){if(OS)return;if('Notification' in window&&Notification.permission==='granted'){try{new Notification(judul,{body:isi})}catch{}}}
 function daftarJadwal(){if(JADWAL&&JADWAL.simpan){try{JADWAL.simpan(S.set.t[0],S.set.t[1],S.set.t[2])}catch{}}}
 function ingat(){S.set.t.forEach((t,i)=>$('#s'+i).value=t);$('#sw').value=S.set.w;nstate()}
 function nstate(){
   if(OS){let izin='';try{izin=OS.izinNotifikasi()}catch{}
     const on=izin==='granted';
-    $('#nState').textContent=on?'Pengingat menyala. HP mengingatkan di jam makan, walau Sepersen ditutup.':'Pengingat mati. Ketuk Nyalakan pengingat, lalu izinkan notifikasi Sepersen di pengaturan HP.';
+    $('#nState').textContent=on?'Pengingat menyala. HP mengingatkan di jam makan, walau Sepersen ditutup.':'Pengingat mati. Ketuk Nyalakan pengingat, lalu izinkan notifikasi Sepersen.';
     $('#wNotifSt').textContent='Status: '+(on?'menyala':'mati');return}
   const p='Notification' in window?Notification.permission:'none', on=S.set.n&&p==='granted';
   $('#nState').textContent=p==='none'?'Pengingat bunyi di aplikasi saat Sepersen terbuka.':'Pengingat '+(p==='denied'?'diblokir. Izinkan lewat pengaturan browser.':on?'menyala. Bunyi saat Sepersen terbuka.':'mati. Nyalakan agar HP mengingatkan di jam makan.');
   $('#wNotifSt').textContent='Status: '+(p==='denied'?'ditolak':on?'menyala':'mati')}
 async function reqNotif(){
-  if(OS){try{OS.mintaIzin()}catch{};S.set.n=true;save();nstate();toast('Izinkan notifikasi Sepersen di pengaturan HP.');return}
+  if(OS){try{OS.mintaIzin()}catch{};S.set.n=true;save();nstate();toast('Izinkan notifikasi Sepersen.');return}
   if(!('Notification' in window))return nstate();
   const p=await Notification.requestPermission();S.set.n=p==='granted';save();nstate()}
 $('#notif').onclick=reqNotif; $('#wNotif').onclick=reqNotif;
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)nstate()});
 $('#sSave').onclick=()=>{S.set.t=[0,1,2].map(i=>$('#s'+i).value||S.set.t[i]);S.set.w=Math.min(20,Math.max(1,+$('#sw').value||8));save();daftarJadwal();toast('Pengaturan tersimpan.')};
 
 /* Cadangan: ekspor / impor JSON */
@@ -518,6 +520,10 @@ $$('[data-tab]').forEach(b=>b.onclick=()=>go(b.dataset.tab));
 $('nav').insertAdjacentHTML('afterbegin','<i class="ind" id="ind" aria-hidden="true"></i>');
 [...$('#home').children].forEach((c,i)=>c.style.setProperty('--i',i));
 home(); setMode('bengong'); nstate();
+
+/* Back Android: tutup sambutan atau kembali ke Hari Ini dulu. */
+window.kembali=()=>{if(!$('#welcome').hidden){closeWelcome();return true}const aktif=$$('section').find(s=>!s.hidden);if(aktif&&aktif.id!=='home'){go('home');return true}return false};
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
